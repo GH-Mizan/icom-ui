@@ -1,0 +1,90 @@
+<form class="form-horizontal" autocomplete="off" #serviceEtryModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="model.id ? 'Edit Service' : 'Create Service'"
+        (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body" *ngIf="!loading">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="date">Date</label>
+                    <div class="col-md-9">
+                        <p-datepicker [(ngModel)]="date" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                            dateFormat="dd/M/yy" (ngModelChange)="list()" [showIcon]="true"/>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="invoiceNumber"> Invoice Number </label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="invoiceNumber" id="invoiceNumber"
+                            [(ngModel)]="model.invoiceNumber" #invModel="ngModel" #invEl />
+                        <abp-validation-summary [control]="invModel" [controlEl]="invEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-3 col-form-label" for="client">Types</label>
+                    <div class="col-9">
+                        <p-multiselect [options]="serviceTypes" [(ngModel)]="selectedServiceTypes" optionLabel="displayText" class="w-full w-100" [ngModelOptions]="{standalone: true}" />
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-3 col-form-label" for="client">Client</label>
+                    <div class="col-9">
+                        <p-select [options]="clients" [(ngModel)]="selectedClient" optionLabel="name" [filter]="true"
+                            filterBy="displayText" [showClear]="true" placeholder="" class="w-full w-100" name="client"
+                            id="client" name="client">
+                            <ng-template #selectedItem let-selectedOption>
+                                <div class="flex items-center gap-2">
+                                    <div>{{ selectedOption.displayText }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-client #item>
+                                <div class="flex items-center gap-2">
+                                    <div>{{ client.displayText }}</div>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="serviceCharge">Service Charge</label>
+                    <div class="col-md-9">
+                        <input type="number" class="form-control" name="serviceCharge" id="serviceCharge" selectOnFocus
+                            [(ngModel)]="model.serviceCharge" (ngModelChange)="calculateDue()" #scModel="ngModel" #scEl />
+                        <abp-validation-summary [control]="scModel" [controlEl]="scEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="totalPaid">Total Paid</label>
+                    <div class="col-md-9">
+                        <input type="number" class="form-control" name="totalPaid" id="totalPaid"
+                            selectOnFocus [(ngModel)]="model.totalPaid" (ngModelChange)="calculateDue()" #tpModel="ngModel" #tpEl />
+                        <abp-validation-summary [control]="tpModel" [controlEl]="tpEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="due">Due</label>
+                    <div class="col-md-9">
+                        <input type="number" class="form-control" name="due" id="due" disabled [(ngModel)]="model.due"
+                             #dueModel="ngModel" #dueEl />
+                        <abp-validation-summary [control]="dueModel" [controlEl]="dueEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="remarks"> Remarks </label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="remarks" id="remarks" [(ngModel)]="model.remarks" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!serviceEtryModal.form.valid || !selectedClient"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

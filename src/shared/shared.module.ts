@@ -26,6 +26,10 @@ import { TableModule } from 'primeng/table';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { PaginatorModule } from 'primeng/paginator';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { SelectModule } from 'primeng/select';
+import { DatePickerModule } from 'primeng/datepicker';
+import { SelectOnFocusDirective } from './directives/select-on-focus.directive';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
     imports: [
@@ -48,6 +52,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
         LocalizePipe,
         BusyDirective,
         EqualValidator,
+        SelectModule,
+        DatePickerModule,
+        SelectOnFocusDirective,
+        MultiSelectModule
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -65,6 +73,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
         TabsModule,
         TableModule,
         PaginatorModule,
+        SelectModule,
+        DatePickerModule,
+        SelectOnFocusDirective,
+        MultiSelectModule
     ],
 })
 export class SharedModule {

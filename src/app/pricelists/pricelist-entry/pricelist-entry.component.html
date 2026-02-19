@@ -1,0 +1,95 @@
+<form class="form-horizontal" autocomplete="off" #pricelistEtryModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="model.id ? 'Edit Pricelist' : 'Create Pricelist'"
+        (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body" *ngIf="!loading">
+        <div class="form-group row required">
+            <label class="col-3 col-form-label" for="product">Product</label>
+            <div class="col-9">
+                <p-select [options]="products" [(ngModel)]="productObj" optionLabel="displayText" name="product"
+                    id="product" [filter]="true" filterBy="displayText" class="w-full w-100"
+                    (ngModelChange)="onProductChanged()" [ngModelOptions]="{standalone: true}">
+                    <ng-template #selectedItem let-selectedOption>
+                        <div class="flex items-center gap-2">
+                            <div>{{ selectedOption.displayText }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-product #item>
+                        <div class="flex items-center gap-2">
+                            <div>{{ product.displayText }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="serial">Serial</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="serial" id="serial" [(ngModel)]="model.serialNo" />
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label">Purchase Date</label>
+            <div class="col-md-9">
+                <p-datepicker [(ngModel)]="date" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                    dateFormat="dd/M/yy" [showIcon]="true" />
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="warrantyPeriod">Warranty Period</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="warrantyPeriod" id="warrantyPeriod"
+                    [(ngModel)]="model.warrantyPeriod" #warrantyModel="ngModel" #warrantyEl/>
+                    <abp-validation-summary [control]="warrantyModel" [controlEl]="warrantyEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="quantity">Quantity</label>
+            <div class="col-md-9">
+                <input type="number" class="form-control" name="quantity" id="quantity" [(ngModel)]="model.quantity"
+                    #qtyModel="ngModel" #qtyEl />
+                <abp-validation-summary [control]="qtyModel" [controlEl]="qtyEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="purchaseUnitPrice">Purchase Unit Price</label>
+            <div class="col-md-9">
+                <input type="number" class="form-control" name="purchaseUnitPrice" id="purchaseUnitPrice"
+                    [(ngModel)]="model.purchaseUnitPrice" #pupModel="ngModel" #pupEl />
+                <abp-validation-summary [control]="pupModel" [controlEl]="pupEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="bodyUnitPrice">Body Unit Price</label>
+            <div class="col-md-9">
+                <input type="number" class="form-control" name="bodyUnitPrice" id="bodyUnitPrice"
+                    [(ngModel)]="model.bodyUnitPrice" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="onlineUnitPrice">Online Unit Price</label>
+            <div class="col-md-9">
+                <input type="number" class="form-control" name="onlineUnitPrice" id="onlineUnitPrice"
+                    [(ngModel)]="model.onlineUnitPrice" />
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="saleUnitPrice">Sale Unit Price</label>
+            <div class="col-md-9">
+                <input type="number" class="form-control" name="saleUnitPrice" id="saleUnitPrice"
+                    [(ngModel)]="model.saleUnitPrice" #supModel="ngModel" #supEl />
+                <abp-validation-summary [control]="supModel" [controlEl]="supEl"></abp-validation-summary>
+            </div>
+        </div>
+
+    </div>
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!pricelistEtryModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

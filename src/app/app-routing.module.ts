@@ -43,10 +43,27 @@ import { AppComponent } from './app.component';
                         loadChildren: () => import('./users/users.module').then((m) => m.UsersModule),
                         canActivate: [AppRouteGuard],
                     },
+                    { path: 'brands', loadChildren: () => import('./brands/brands.module').then(m => m.BrandsModule) },
+                    { path: 'suppliers', loadChildren: () => import('./suppliers/suppliers.module').then(m => m.SuppliersModule) },
+                    { path: 'categories', loadChildren: () => import('./categories/categories.module').then(m => m.CategoriesModule) },
+                    { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },
+                    { path: 'pricelists', loadChildren: () => import('./pricelists/pricelists.module').then(m => m.PricelistsModule) },
+                    { path: 'inventories', loadChildren: () => import('./inventories/inventories.module').then(m => m.InventoriesModule) },
+                    { path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule) },
+                    { path: 'clients', loadChildren: () => import('./clients/clients.module').then(m => m.ClientsModule) },
+                    { path: 'services', loadChildren: () => import('./services/services.module').then(m => m.ServicesModule) },
                 ],
             },
+            
+            
+            
+           
+            
+            
+
+
         ]),
     ],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
