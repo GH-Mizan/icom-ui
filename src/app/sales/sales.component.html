@@ -79,10 +79,10 @@
                                         <span>{{record.netAmount | number: '1.2-2'}}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.paidAmount }}</span>
+                                        <span>{{ record.paidAmount | number: '1.2-2' }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.dueAmount }}</span>
+                                        <span>{{ record.dueAmount | number: '1.2-2' }}</span>
                                     </td>
                                     <td class="text-center">
                                         <span *ngIf="record.paymentStatus == 1"

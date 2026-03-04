@@ -1,22 +1,22 @@
 import { ChangeDetectorRef, Component, Injector, ViewChild } from '@angular/core';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { BtebSessionEntryInputDto, BtebSessionOutputDto, BtebSessionServiceProxy } from '@shared/service-proxies/service-proxies';
 import { Table } from 'primeng/table';
 import { Paginator } from "primeng/paginator";
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 import { LazyLoadEvent } from "primeng/api";
 import { finalize } from "rxjs/operators";
-import { CategoryEntryDto, CategoryOutputDto, CategoryServiceProxy } from '@shared/service-proxies/service-proxies';
-import { CategoryEntryComponent } from './category-entry/category-entry.component';
+import { BtebSessionEntryComponent } from './bteb-session-entry/bteb-session-entry.component';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
 
 @Component({
-  selector: 'app-categories',
+  selector: 'app-bteb-sessions',
   standalone: false,
-  templateUrl: './categories.component.html',
+  templateUrl: './bteb-sessions.component.html',
   animations: [appModuleAnimation()],
 })
 
-export class CategoriesComponent extends PagedListingComponentBase<CategoryOutputDto> {
+export class BtebSessionsComponent extends PagedListingComponentBase<BtebSessionOutputDto> {
   @ViewChild('dataTable', { static: true }) dataTable: Table;
   @ViewChild('paginator', { static: true }) paginator: Paginator;
 
@@ -24,9 +24,9 @@ export class CategoriesComponent extends PagedListingComponentBase<CategoryOutpu
 
   constructor(
     injector: Injector,
-    cd: ChangeDetectorRef,
-    private readonly _categoryService: CategoryServiceProxy,
+    private readonly _sessionService: BtebSessionServiceProxy,
     private readonly _modalService: BsModalService,
+    cd: ChangeDetectorRef
   ) {
     super(injector, cd);
   }
@@ -44,7 +44,7 @@ export class CategoriesComponent extends PagedListingComponentBase<CategoryOutpu
     }
 
     this.primengTableHelper.showLoadingIndicator();
-    this._categoryService.getPaginatedCategories(
+    this._sessionService.getPaginatedBtebSessions(
       this.searchText,
       this.primengTableHelper.getSkipCount(this.paginator, event),
       this.primengTableHelper.getMaxResultCount(this.paginator, event)
@@ -59,32 +59,36 @@ export class CategoriesComponent extends PagedListingComponentBase<CategoryOutpu
         this.primengTableHelper.hideLoadingIndicator();
         this.cd.detectChanges();
       });
+
+
   }
 
   create() {
-        const category = new CategoryEntryDto();
-        this.showEntryDialog(category);
+    const session = new BtebSessionEntryInputDto();
+    this.showentryDialog(session);
+  }
+
+  edit(id: number) {
+    this._sessionService.get(id).subscribe(res => {
+      this.showentryDialog(res);
+    });
+  }
+
+  
+  private showentryDialog(session: BtebSessionEntryInputDto): void {
+    let entryDialog: BsModalRef;
+    entryDialog = this._modalService.show(
+      BtebSessionEntryComponent,
+      {
+        class: "modal-lg",
+        initialState: {
+          model: session,
+        },
       }
-    
-      edit(id: number) {
-        this._categoryService.get(id).subscribe(res => {
-          this.showEntryDialog(res);
-        });
-      }
-    
-      private showEntryDialog(category: CategoryEntryDto): void {
-        let entryDialog: BsModalRef;
-        entryDialog = this._modalService.show(
-          CategoryEntryComponent,
-          {
-            class: "modal-lg",
-            initialState: {
-              model: category,
-            },
-          }
-        );
-        entryDialog.content.onSave.subscribe(() => {
-          this.refresh();
-        });
-      }
+    );
+    entryDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
+  }
+
 }

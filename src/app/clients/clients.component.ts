@@ -65,10 +65,16 @@ export class ClientsComponent extends PagedListingComponentBase<ClientOutputDto>
 
   create() {
     const client = new ClientEntryDto();
-    this.showProductEntryDialog(client);
+    this.showEntryDialog(client);
   }
 
-  private showProductEntryDialog(client: ClientEntryDto): void {
+  edit(id: number) {
+    this._clientService.get(id).subscribe(res => {
+      this.showEntryDialog(res);
+    });
+  }
+
+  private showEntryDialog(client: ClientEntryDto): void {
     let clientEntryDialog: BsModalRef;
     clientEntryDialog = this._modalService.show(
       ClientEntryComponent,

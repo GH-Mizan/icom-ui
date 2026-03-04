@@ -52,8 +52,14 @@ import { AppComponent } from './app.component';
                     { path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule) },
                     { path: 'clients', loadChildren: () => import('./clients/clients.module').then(m => m.ClientsModule) },
                     { path: 'services', loadChildren: () => import('./services/services.module').then(m => m.ServicesModule) },
+                    { path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.InvoicesModule) },
+                    { path: 'bteb-sessions', loadChildren: () => import('./bteb-sessions/bteb-sessions.module').then(m => m.BtebSessionsModule) },
+                    { path: 'students', loadChildren: () => import('./students/students.module').then(m => m.StudentsModule) },
                 ],
             },
+            
+            
+            
             
             
             

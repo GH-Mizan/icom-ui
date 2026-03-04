@@ -85,6 +85,6 @@
             </div>
         </div>
     </div>
-    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!serviceEtryModal.form.valid || !selectedClient"
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!serviceEtryModal.form.valid || saving || !selectedClient"
         (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
 </form>

@@ -6,7 +6,7 @@
           <h1>Brands</h1>
         </div>
         <div class="col-6 text-right">
-          <a href="javascript:;" class="btn bg-blue">
+          <a href="javascript:;" class="btn bg-blue" (click)="create()">
             <i class="fa fa-plus-square"></i>
           </a>
         </div>
@@ -61,9 +61,9 @@
                     <span>{{ record.shortName }}</span>
                   </td>
                   <td class="text-center">
-                    <!-- <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)" *ngIf="isGranted('Pages.Client.Edit')">
+                    <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
                       <i class="fas fa-pencil-alt"></i>
-                    </button> -->
+                    </button>
                     <!-- <button type="button" class="btn btn-sm bg-success" (click)="openCustomerPriceModal(record)">
                       <i class="fas fa-file-invoice-dollar"></i>
                     </button> -->

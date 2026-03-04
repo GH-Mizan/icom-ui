@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } from "@angular/core";
 import { AppComponentBase } from "../../../shared/app-component-base";
-import { ClientServiceProxy, ComboboxItemDto, DueReceivedHistoryDto, PaymentStatus, PricelistServiceProxy, ProductServiceProxy, SalesDetailsEntryDto, SalesEntryDto, SalesEntryInputDto, SalesServiceProxy, ServiceDueReceivedHistoryDto, ServiceEntryDto, ServiceEntryInputDto, ServiceServiceProxy } from "@shared/service-proxies/service-proxies";
+import { ClientServiceProxy, ComboboxItemDto, PaymentStatus, ServiceDueReceivedHistoryDto, ServiceEntryDto, ServiceEntryInputDto, ServiceServiceProxy } from "@shared/service-proxies/service-proxies";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import moment from "moment";
 import { debounceTime, distinctUntilChanged, firstValueFrom, map, Observable } from "rxjs";
@@ -56,6 +56,26 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
             this.loadServiceTypes(),
             this.loadClients()
         ]);
+        if (this.model?.id) {
+            this.date = this.model.date.toDate();
+            this.selectedClient = {
+                displayText: this.clients.find(f => f.value == this.model.clientId.toString()).displayText,
+                isSelected: false,
+                value: this.model.clientId.toString()
+            }
+            this.selectedServiceTypes = [];
+            const serviceTypesArray = this.model.serviceTypes.split(',');
+            serviceTypesArray.forEach(x => {
+                this.selectedServiceTypes.push({
+                    value: x.trim(), 
+                    displayText: this.serviceTypes.find(f=> f.value === x.trim()).displayText,
+                    isSelected: false 
+                } as ComboboxItemDto);
+            });
+         
+            this.cd.detectChanges();
+        }
+
         this.loading = false;
         this.cd.detectChanges();
     }
@@ -87,7 +107,7 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
         model.date = moment(this.date);
         model.clientId = parseInt(this.selectedClient.value);
         model.serviceTypes = this.selectedServiceTypes.map(item => item.value).join(', ');
-        model.paymentStatus = model.due == 0 ? PaymentStatus._1 : model.totalPaid == model.due ? PaymentStatus._3 : PaymentStatus._2
+        model.paymentStatus = model.due == 0 ? PaymentStatus._1 : model.serviceCharge == model.due ? PaymentStatus._3 : PaymentStatus._2
 
         const input = {
             service: model
@@ -96,7 +116,7 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
         input.dueReceived = {
             serviceId: model.id,
             clientId: model.clientId,
-            paymentStatus: model.due == 0 ? PaymentStatus._1 : model.totalPaid == model.due ? PaymentStatus._3 : PaymentStatus._2,
+            paymentStatus: model.due == 0 ? PaymentStatus._1 : model.serviceCharge == model.due ? PaymentStatus._3 : PaymentStatus._2,
             grandTotal: model.serviceCharge,
             totalPaid: model.totalPaid,
             due: model.due,

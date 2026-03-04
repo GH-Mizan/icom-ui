@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
-                    <h1>Services</h1>
+                    <h1>Students</h1>
                 </div>
                 <div class="col-6 text-right">
                     <a href="javascript:;" class="btn bg-blue" (click)="create()">
@@ -43,17 +43,33 @@
                             [tableStyle]="{ 'min-width': '50rem' }">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Invoice</th>
-                                    <th>Client</th>
-                                    <th>ServiceTypes</th>
-                                    <th>Total</th>
-                                    <th>Paid</th>
-                                    <th>Due</th>
-                                    <th>Status</th>
-                                    <th>Remarks</th>
+                                    <th> Name </th>
+                                    <th> Contact </th>
+                                    <th> Class Roll</th>
+                                    <th> Bteb </th>
+                                    <th> BtebAdmitted</th>
+                                    <th> BtebRegistered</th>
+                                    <th> RunningProgram</th>
+                                    <th> Course</th>
+                                    <th> Duration</th>
+                                    <th> BtebSession</th>
+                                    <th> RegistrationNumber</th>
+                                    <th> DidExam</th>
+                                    <th> ResultStatus</th>
+                                    <th> Result</th>
+                                    <th> SessionChanged</th>
+                                    <th> CourseFee </th>
+                                    <th> AdmisionDate</th>
+                                    <th> FathersName</th>
+                                    <th> MothersName</th>
+                                    <th> DateOfBirth</th>
+                                    <th> BloodGroup</th>
+                                    <th> Email</th>
+                                    <th> PermanentAddress</th>
+                                    <th> PresentAddress</th>
+                                    <th> Remarks</th>
                                     <th class="text-center">
-                                        Actions
+                                        {{ "Actions" }}
                                     </th>
                                 </tr>
                             </ng-template>
@@ -61,57 +77,84 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td>
-                                        <span>{{ record.date | date: 'dd-MMM-yy' }}</span>
+                                        <span>{{ record.name }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.invoiceNumber }}</span>
+                                        <span>{{ record.contactNumber }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.clientName }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.serviceTypeNames }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{record.serviceCharge | number: '1.2-2'}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{record.totalPaid | number: '1.2-2'}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.due }}</span>
+                                        <span>{{ record.classRoll }}</span>
                                     </td>
                                     <td class="text-center">
-                                        <span *ngIf="record.paymentStatus == 1"
-                                            class="badge badge-pill badge-success">{{record.paymentStatusText}}</span>
-                                        <span *ngIf="record.paymentStatus == 2"
-                                            class="badge badge-pill badge-warning">{{record.paymentStatusText}}</span>
-                                        <span *ngIf="record.paymentStatus == 3"
-                                            class="badge badge-pill badge-danger">{{record.paymentStatusText}}</span>
+                                        <span> <input type="checkbox" value="" [checked]="record.bteb" disabled> </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span> <input type="checkbox" value="" [checked]="record.btebAdmitted" disabled> </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span> <input type="checkbox" value="" [checked]="record.btebRegistered" disabled> </span>
                                     </td>
                                     <td>
-                                        <span>{{record.remarks}}</span>
+                                        <span>{{ record.runningProgramText }}</span>
                                     </td>
-
+                                    <td>
+                                        <span>{{ record.courseName }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.durationText }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.btebSessionText }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.btebRegistrationNumber }}</span>
+                                    </td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-sm bg-green" (click)="edit(record.id)">
+                                        <span> <input type="checkbox" value="" [checked]="record.didExam" disabled> </span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.resultStatusText }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.result }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span> <input type="checkbox" value="" [checked]="record.isSessionChanged" disabled> </span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.courseFee }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.admisionDate | date: 'dd-MMM-yyyy' }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.fathersName }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.mothersName }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.dateOfBirth | date: 'dd-MMM-yyyy' }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.bloodGroupText }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.email }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.permanentAddress }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.presentAddress }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.remarks }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
-
-                                        <button type="button" class="btn btn-sm bg-secondary mx-1"
-                                            (click)="showPaymentHistory(record.id)">
-                                            <i class="fa fa-history"></i>
-                                        </button>
-
-                                        <button *ngIf="paymentStatus != 1" type="button"
-                                            class="btn btn-sm bg-primary mx-1" (click)="makeDuePayment(record)">
-                                            <i class="fas fa-dollar-sign"></i>
-                                        </button>
-
-                                        <button type="button" class="btn btn-sm bg-danger" (click)="delete(record)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-
                                     </td>
                                 </tr>
                             </ng-template>

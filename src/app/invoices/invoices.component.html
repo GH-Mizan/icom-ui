@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-6">
-          <h1>Categories</h1>
+          <h1>Invoices</h1>
         </div>
         <div class="col-6 text-right">
           <a href="javascript:;" class="btn bg-blue" (click)="create()">
@@ -18,8 +18,7 @@
       <div class="card table-wrapper">
         <div class="card-header">
           <div class="row">
-            <div class="col-md-6">&emsp;</div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <button type="button" class="btn bg-blue" (click)="list()">
@@ -31,8 +30,30 @@
 
               </div>
             </div>
-          </div>
+            <!-- <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label"> Category </label>
+                <div class="col-md-9">
+                  <select class="form-select form-control" [(ngModel)]="categoryId" (ngModelChange)="list()">
+                    <option *ngFor="let c of categories" [value]="c.value">{{c.displayText}}
+                    </option>
+                  </select>
+                </div>
+              </div>
 
+            </div>
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label"> Brand </label>
+                <div class="col-md-9">
+                  <select class="form-select form-control" [(ngModel)]="brandId" (ngModelChange)="list()">
+                    <option *ngFor="let b of brands" [value]="b.value">{{b.displayText}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div> -->
+          </div>
         </div>
         <div class="card-body table-responsive table-striped table-bordered">
           <!--<Primeng-TurboTable-Start>-->
@@ -42,9 +63,12 @@
               [tableStyle]="{ 'min-width': '50rem' }">
               <ng-template pTemplate="header">
                 <tr>
-                  <th style="min-width: 150px">
-                    Category Name
-                  </th>
+                  <th>Date</th>
+                  <th>Invoice Number</th>
+                  <th>Client</th>
+                  <th>Invoice Type</th>
+                  <th>Amount</th>
+                  <th>Remarks</th>
                   <th class="text-center">
                     Actions
                   </th>
@@ -53,9 +77,12 @@
 
               <ng-template pTemplate="body" let-record="$implicit">
                 <tr>
-                  <td>
-                    <span>{{ record.categoryName }}</span>
-                  </td>
+                  <td><span>{{ record.date | date: 'dd-MMM-yyyy' }}</span></td>
+                  <td><span>{{ record.invoiceNumber }}</span></td>
+                  <td><span>{{ record.clientName }}</span></td>
+                  <td><span>{{ record.invoiceTypeText }}</span></td>
+                  <td><span>{{ record.totalBill }}</span></td>
+                  <td><span>{{ record.remarks }}</span></td>
                   <td class="text-center">
                     <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
                       <i class="fas fa-pencil-alt"></i>

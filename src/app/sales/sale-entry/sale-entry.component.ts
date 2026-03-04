@@ -39,6 +39,7 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
     productId: string = "";
     productObj: any;
     date = new Date();
+    invoiceDate = new Date();
     // invoiceNumber: string;
     serialNo: string;
     availableQuantity: number = 0;
@@ -137,7 +138,7 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
         const model = this.model;
         model.date = moment(this.date);
         model.clientId = parseInt(this.selectedClient.value);
-        model.totalAmount = this.totalValues.totalAmount;
+        model.totalAmount = this.totalValues.totalPrice;
         model.paymentStatus = model.dueAmount == 0 ? PaymentStatus._1 : model.netAmount == model.dueAmount ? PaymentStatus._3 : PaymentStatus._2;
 
         const details: SalesDetailsEntryDto[] = [];
@@ -161,7 +162,7 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
             salesId: model.id,
             clientId: model.clientId,
             creationTime: moment(new Date()),
-            invoiceDate: model.date,
+            invoiceDate: moment(this.invoiceDate),
             receiveDate: model.date,
             invoiceNumber: model.invoiceNumber,
             paymentStatus: model.paymentStatus,
@@ -228,16 +229,38 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
         } as SalesDetailsEntryDto;
         this.saleDetails.push(saleDetail);
 
+        this.calculateTotalValues();
+
+        this.products = this.products.filter(f=> f.value !== this.productId);
+
+        this.clear();
+    }
+
+    calculateTotalValues() {
         this.totalValues = this.saleDetails.reduce((accumulator, item) => {
             accumulator.quantity += item.quantity;
             accumulator.unitPrice += item.unitPrice;
             accumulator.totalPrice += item.totalPrice;
             return accumulator;
         }, { quantity: 0, unitPrice: 0, totalPrice: 0, discount: 0, netPrice: 0 });
+    }
 
-        this.products = this.products.filter(f=> f.value !== this.productId);
-
-        this.clear();
+    onInvoicedChanged() {
+        this._salesService.prepareSaleFromInvoice(this.model.invoiceNumber).subscribe(res=> {
+            if(res.sales.invoiceNumber === "DUPLICATE")
+                abp.message.info("This invoice number is already exists. Please Check.", "Duplicate");
+            
+            this.date = res.sales.date.toDate();
+            this.invoiceDate = this.date;
+            this.selectedClient = {
+                displayText: this.clients.find(f => f.value == res.sales.clientId.toString()).displayText,
+                isSelected: false,
+                value: res.sales.clientId.toString()
+            };
+            this.saleDetails = res.salesDetails;
+            this.calculateTotalValues();
+            this.cd.detectChanges();
+        })
     }
 
 

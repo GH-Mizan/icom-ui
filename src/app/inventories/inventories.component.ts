@@ -5,7 +5,8 @@ import { Paginator } from "primeng/paginator";
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { LazyLoadEvent } from "primeng/api";
 import { finalize } from "rxjs/operators";
-import { InventoryOutputDto, InventoryServiceProxy } from '@shared/service-proxies/service-proxies';
+import { BrandServiceProxy, CategoryServiceProxy, ComboboxItemDto, InventoryOutputDto, InventoryServiceProxy } from '@shared/service-proxies/service-proxies';
+import { firstValueFrom } from "rxjs";
 
 @Component({
   selector: 'app-inventories',
@@ -19,13 +20,40 @@ export class InventoriesComponent extends PagedListingComponentBase<InventoryOut
   @ViewChild('paginator', { static: true }) paginator: Paginator;
 
   searchText: string = "";
+  brands: ComboboxItemDto[];
+  categories: ComboboxItemDto[];
+  categoryId: number;
+  brandId: number;
 
   constructor(
     injector: Injector,
     cd: ChangeDetectorRef,
-    private readonly _inventoryService: InventoryServiceProxy
+    private readonly _inventoryService: InventoryServiceProxy,
+    private readonly _brandService: BrandServiceProxy,
+    private readonly _categoryService: CategoryServiceProxy,
   ) {
     super(injector, cd);
+  }
+
+  async ngOnInit() {
+    await Promise.all(
+      [
+        this.loadBrands(),
+        this.loadCategories()
+      ]
+    ).then(() => {
+      this.cd.detectChanges();
+    });
+  }
+
+  async loadBrands() {
+    this.brands = await firstValueFrom(this._brandService.getBrandsSelectList());
+    this.cd.detectChanges();
+  }
+
+  async loadCategories() {
+    this.categories = await firstValueFrom(this._categoryService.getCategoriesSelectList());
+    this.cd.detectChanges();
   }
 
   list(event?: LazyLoadEvent): void {
@@ -42,6 +70,8 @@ export class InventoriesComponent extends PagedListingComponentBase<InventoryOut
 
     this.primengTableHelper.showLoadingIndicator();
     this._inventoryService.getPaginated(
+      this.categoryId,
+      this.brandId,
       this.searchText,
       this.primengTableHelper.getSkipCount(this.paginator, event),
       this.primengTableHelper.getMaxResultCount(this.paginator, event)
@@ -57,4 +87,6 @@ export class InventoriesComponent extends PagedListingComponentBase<InventoryOut
         this.cd.detectChanges();
       });
   }
+
+  
 }

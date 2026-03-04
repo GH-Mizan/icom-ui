@@ -1,22 +1,23 @@
 import { ChangeDetectorRef, Component, Injector, ViewChild } from '@angular/core';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { StudentEntryInputDto, StudentOutputDto, StudentServiceProxy } from '@shared/service-proxies/service-proxies';
 import { Table } from 'primeng/table';
 import { Paginator } from "primeng/paginator";
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 import { LazyLoadEvent } from "primeng/api";
 import { finalize } from "rxjs/operators";
-import { CategoryEntryDto, CategoryOutputDto, CategoryServiceProxy } from '@shared/service-proxies/service-proxies';
-import { CategoryEntryComponent } from './category-entry/category-entry.component';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { StudentEntryComponent } from './student-entry/student-entry.component';
 
 @Component({
-  selector: 'app-categories',
+  selector: 'app-students',
   standalone: false,
-  templateUrl: './categories.component.html',
+  templateUrl: './students.component.html',
   animations: [appModuleAnimation()],
 })
 
-export class CategoriesComponent extends PagedListingComponentBase<CategoryOutputDto> {
+export class StudentsComponent extends PagedListingComponentBase<StudentOutputDto> {
+
   @ViewChild('dataTable', { static: true }) dataTable: Table;
   @ViewChild('paginator', { static: true }) paginator: Paginator;
 
@@ -24,9 +25,9 @@ export class CategoriesComponent extends PagedListingComponentBase<CategoryOutpu
 
   constructor(
     injector: Injector,
-    cd: ChangeDetectorRef,
-    private readonly _categoryService: CategoryServiceProxy,
+    private readonly _studentService: StudentServiceProxy,
     private readonly _modalService: BsModalService,
+    cd: ChangeDetectorRef
   ) {
     super(injector, cd);
   }
@@ -44,7 +45,7 @@ export class CategoriesComponent extends PagedListingComponentBase<CategoryOutpu
     }
 
     this.primengTableHelper.showLoadingIndicator();
-    this._categoryService.getPaginatedCategories(
+    this._studentService.getPaginatedStudents(
       this.searchText,
       this.primengTableHelper.getSkipCount(this.paginator, event),
       this.primengTableHelper.getMaxResultCount(this.paginator, event)
@@ -59,32 +60,35 @@ export class CategoriesComponent extends PagedListingComponentBase<CategoryOutpu
         this.primengTableHelper.hideLoadingIndicator();
         this.cd.detectChanges();
       });
+
+
   }
 
   create() {
-        const category = new CategoryEntryDto();
-        this.showEntryDialog(category);
+    const student = new StudentEntryInputDto();
+    this.showentryDialog(student);
+  }
+
+  edit(id: number) {
+    this._studentService.get(id).subscribe(res => {
+      this.showentryDialog(res);
+    });
+  }
+
+
+  private showentryDialog(student: StudentEntryInputDto): void {
+    let entryDialog: BsModalRef;
+    entryDialog = this._modalService.show(
+      StudentEntryComponent,
+      {
+        class: "modal-xl",
+        initialState: {
+          model: student,
+        },
       }
-    
-      edit(id: number) {
-        this._categoryService.get(id).subscribe(res => {
-          this.showEntryDialog(res);
-        });
-      }
-    
-      private showEntryDialog(category: CategoryEntryDto): void {
-        let entryDialog: BsModalRef;
-        entryDialog = this._modalService.show(
-          CategoryEntryComponent,
-          {
-            class: "modal-lg",
-            initialState: {
-              model: category,
-            },
-          }
-        );
-        entryDialog.content.onSave.subscribe(() => {
-          this.refresh();
-        });
-      }
+    );
+    entryDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
+  }
 }

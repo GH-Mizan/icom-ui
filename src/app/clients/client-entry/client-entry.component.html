@@ -54,7 +54,7 @@
             <label class="col-md-3 col-form-label" for="type"> Type </label>
             <div class="col-md-9">
                 <select class="form-select form-control" name="type" id="type" #typeModel="ngModel"
-                    #typeEl [(ngModel)]="model.supplierId">
+                    #typeEl [(ngModel)]="model.type" required>
                     <option *ngFor="let s of clientTypes" [value]="s.value">{{s.displayText}}
                     </option>
                 </select>

@@ -6,7 +6,8 @@ import { PagedListingComponentBase } from '@shared/paged-listing-component-base'
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 import { LazyLoadEvent } from "primeng/api";
 import { finalize } from "rxjs/operators";
-import { BrandOutputDto, BrandServiceProxy } from '@shared/service-proxies/service-proxies';
+import { BrandEntryDto, BrandOutputDto, BrandServiceProxy } from '@shared/service-proxies/service-proxies';
+import { BrandEntryComponent } from './brand-entry/brand-entry.component';
 
 @Component({
   selector: 'app-brands',
@@ -25,7 +26,8 @@ export class BrandsComponent extends PagedListingComponentBase<BrandOutputDto> {
   constructor(
     injector: Injector,
     cd: ChangeDetectorRef,
-    private readonly _brandsService: BrandServiceProxy
+    private readonly _brandsService: BrandServiceProxy,
+    private readonly _modalService: BsModalService,
   ) {
     super(injector, cd);
   }
@@ -61,4 +63,33 @@ export class BrandsComponent extends PagedListingComponentBase<BrandOutputDto> {
 
 
   }
+
+  create() {
+      const brand = new BrandEntryDto();
+      this.showEntryDialog(brand);
+    }
+  
+    edit(id: number) {
+      this._brandsService.get(id).subscribe(res => {
+        this.showEntryDialog(res);
+      });
+    }
+  
+    private showEntryDialog(brand: BrandEntryDto): void {
+      let entryDialog: BsModalRef;
+      entryDialog = this._modalService.show(
+        BrandEntryComponent,
+        {
+          class: "modal-lg",
+          initialState: {
+            model: brand,
+          },
+        }
+      );
+      entryDialog.content.onSave.subscribe(() => {
+        this.refresh();
+      });
+    }
+  
+
 }

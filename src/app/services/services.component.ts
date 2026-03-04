@@ -71,8 +71,10 @@ export class ServicesComponent extends PagedListingComponentBase<ServiceOutputDt
     }
   
     edit(id: number) {
-  
-    }
+    this._serviceProxy.get(id).subscribe(res => {
+      this.showServiceEntryDialog(res);
+    });
+  }
   
     showPaymentHistory(id: number) {
       let dueReceivedHistoryDialog: BsModalRef;

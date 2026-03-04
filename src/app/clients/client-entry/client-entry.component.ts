@@ -3,6 +3,7 @@ import { firstValueFrom } from "rxjs";
 import { AppComponentBase } from "@shared/app-component-base";
 import { BrandServiceProxy, CategoryServiceProxy, ClientEntryDto, ClientServiceProxy, ComboboxItemDto, ProductEntryDto, ProductServiceProxy, SupplierServiceProxy } from "@shared/service-proxies/service-proxies";
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import moment from "moment";
 
 @Component({
     selector: 'app-client-entry',
@@ -40,6 +41,7 @@ export class ClientEntryComponent extends AppComponentBase implements OnInit {
 
     save() {
         this.saving = true;
+        this.model.entryDate = moment(this.date);
         this._clientService.createOrUpdate(this.model).subscribe(() => {
             this.notify.info(this.model.id ? "Successfully Updated" : "Successfully Saved");
             this.bsModalRef.hide();

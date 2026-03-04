@@ -69,7 +69,7 @@
                                         <span>{{ record.contactNumber }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.WhatsAppNumber }}</span>
+                                        <span>{{ record.whatsAppNumber }}</span>
                                     </td>
                                     <td>
                                         <span>{{ record.email }}</span>
@@ -78,18 +78,15 @@
                                         <span>{{ record.address }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.type }}</span>
+                                        <span>{{ record.typeText }}</span>
                                     </td>
                                     <td>
                                         <span>{{ record.remarks }}</span>
                                     </td>
                                     <td class="text-center">
-                                        <!-- <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)" *ngIf="isGranted('Pages.Client.Edit')">
-                      <i class="fas fa-pencil-alt"></i>
-                    </button> -->
-                                        <!-- <button type="button" class="btn btn-sm bg-success" (click)="openCustomerPriceModal(record)">
-                      <i class="fas fa-file-invoice-dollar"></i>
-                    </button> -->
+                                        <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
 
                                     </td>
                                 </tr>

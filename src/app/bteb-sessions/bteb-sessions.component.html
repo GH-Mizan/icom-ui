@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
-                    <h1>Pricelists</h1>
+                    <h1>Bteb Sessions</h1>
                 </div>
                 <div class="col-6 text-right">
                     <a href="javascript:;" class="btn bg-blue" (click)="create()">
@@ -18,7 +18,8 @@
             <div class="card table-wrapper">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">&emsp;</div>
+                        <div class="col-md-6">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <button type="button" class="btn bg-blue" (click)="list()">
@@ -28,31 +29,6 @@
                                 <input type="text" class="form-control" name="keyword" placeholder="Search..."
                                     [(ngModel)]="searchText" (keyup.enter)="list()" />
 
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group row required">
-                                <label class="col-md-3 col-form-label"> Category </label>
-                                <div class="col-md-9">
-                                    <select class="form-select form-control" [(ngModel)]="categoryId"
-                                        (ngModelChange)="list()">
-                                        <option *ngFor="let c of categories" [value]="c.value">{{c.displayText}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label"> Brand </label>
-                                <div class="col-md-9">
-                                    <select class="form-select form-control" [(ngModel)]="brandId"
-                                        (ngModelChange)="list()">
-                                        <option *ngFor="let b of brands" [value]="b.value">{{b.displayText}}
-                                        </option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,17 +43,16 @@
                             [tableStyle]="{ 'min-width': '50rem' }">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th>Serial No</th>
-                                    <th>Purchase Date</th>
-                                    <th>Warranty</th>
-                                    <th>Quantity</th>
-                                    <th *ngIf="isGranted('Pages.PurchasePrice')">PurchaseUnitPrice</th>
-                                    <th>BodyUnitPrice</th>
-                                    <th>OnlineUnitPrice</th>
-                                    <th>SaleUnitPrice</th>
+                                    <th> Session Name </th>
+                                    <th> Session Period </th>
+                                    <th> Examination Held</th>
+                                    <th> Examination Date</th>
+                                    <th> Result Published</th>
+                                    <th> Result Published Date</th>
+                                    <th> Certificate Provided</th>
+                                    <th> Certificate Provided Date</th>
                                     <th class="text-center">
-                                        Actions
+                                        {{ "Actions" }}
                                     </th>
                                 </tr>
                             </ng-template>
@@ -85,40 +60,33 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td>
-                                        <span>{{ record.productName }}</span>
+                                        <span>{{ record.sessionName }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.serialNo }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.purchaseDate | date: 'dd-MMM-yyyy' }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.warrantyPeriod }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.quantity }}</span>
-                                    </td>
-                                    <td *ngIf="isGranted('Pages.PurchasePrice')">
-                                        <span>{{ record.purchaseUnitPrice }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.bodyUnitPrice }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.onlineUnitPrice }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.saleUnitPrice }}</span>
+                                        <span>{{ record.sessionPeriod }}</span>
                                     </td>
                                     <td class="text-center">
-                                        <!-- <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)" *ngIf="isGranted('Pages.Client.Edit')">
-                      <i class="fas fa-pencil-alt"></i>
-                    </button> -->
-                                        <!-- <button type="button" class="btn btn-sm bg-success" (click)="openCustomerPriceModal(record)">
-                      <i class="fas fa-file-invoice-dollar"></i>
-                    </button> -->
-
+                                        <span> <input type="checkbox" value="" [checked]="record.isExaminationHeld" disabled> </span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.examinationDate | date: 'dd-MMM-yyyy' }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span> <input type="checkbox" value="" [checked]="record.isResultPublished" disabled> </span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.resultPublishedDate | date: 'dd-MMM-yyyy' }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span> <input type="checkbox" value="" [checked]="record.isCertificateProvided" disabled> </span>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.certificateDate | date: 'dd-MMM-yyyy' }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             </ng-template>

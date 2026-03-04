@@ -1,0 +1,17 @@
+<form class="form-horizontal" autocomplete="off" #entryModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header [title]="model.id ? 'Edit Brand' : 'Create Brand'" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body">
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="categoryName">{{ "Name" | localize }}</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="name" id="categoryName" required [(ngModel)]="model.categoryName"
+                    #nameModel="ngModel" #nameEl />
+                <abp-validation-summary [control]="nameModel" [controlEl]="nameEl"></abp-validation-summary>
+            </div>
+        </div>
+        
+    </div>
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!entryModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

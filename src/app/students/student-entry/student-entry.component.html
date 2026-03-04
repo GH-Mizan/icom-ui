@@ -1,0 +1,351 @@
+<form class="form-horizontal" autocomplete="off" #entryModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header title="Create/Edit student" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="name">Name</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="name" id="name" required [(ngModel)]="model.name"
+                            #nameModel="ngModel" #nameEl />
+                        <abp-validation-summary [control]="nameModel" [controlEl]="nameEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="date">Admission Date</label>
+                    <div class="col-md-9">
+                        <p-datepicker [(ngModel)]="admisionDate" [ngModelOptions]="{standalone: true}"
+                            [readonlyInput]="true" dateFormat="dd/M/yy" [showIcon]="true" />
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="fathersName">Fathers Name</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="fathersName" id="fathersName" required
+                            [(ngModel)]="model.fathersName" #fathersNameModel="ngModel" #fathersNameEl />
+                        <abp-validation-summary [control]="fathersNameModel"
+                            [controlEl]="fathersNameEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="mothersName">Mothers Name</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="mothersName" id="mothersName" required
+                            [(ngModel)]="model.mothersName" #mothersNameModel="ngModel" #mothersNameEl />
+                        <abp-validation-summary [control]="mothersNameModel"
+                            [controlEl]="mothersNameEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="date">Birth Date</label>
+                    <div class="col-md-9">
+                        <p-datepicker [(ngModel)]="dateOfBirth" [ngModelOptions]="{standalone: true}"
+                            [readonlyInput]="true" dateFormat="dd/M/yy" [showIcon]="true" [showClear]="true" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="bloodGroup"> Blood Group </label>
+                    <div class="col-md-9">
+                        <select class="form-select form-control" name="bloodGroup" id="bloodGroup"
+                            [(ngModel)]="model.bloodGroup">
+                            <option *ngFor="let bg of bloodGroups" [value]="bg.value">{{bg.displayText}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="contactNumber">Contact Number</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="contactNumber" id="contactNumber" required
+                            [(ngModel)]="model.contactNumber" #contactNumberModel="ngModel" #contactNumberEl />
+                        <abp-validation-summary [control]="contactNumberModel"
+                            [controlEl]="contactNumberEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="email">Email</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="email" id="email" [(ngModel)]="model.email" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="permanentAddress">Permanent Address</label>
+                    <div class="col-md-9">
+                        <textarea class="form-control" name="permanentAddress" id="permanentAddress"
+                            [(ngModel)]="model.permanentAddress" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="presentAddress">Present Address</label>
+                    <div class="col-md-9">
+                        <textarea class="form-control" name="presentAddress" id="presentAddress"
+                            [(ngModel)]="model.presentAddress" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="course"> Course </label>
+                    <div class="col-md-9">
+                        <select class="form-select form-control" name="course" id="course" [(ngModel)]="model.course"
+                            required>
+                            <option *ngFor="let c of iccCourses" [value]="c.value">{{c.displayText}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="duration">Course Duration </label>
+                    <div class="col-md-9">
+                        <select class="form-select form-control" name="duration" id="duration"
+                            [(ngModel)]="model.duration" required>
+                            <option *ngFor="let d of durations" [value]="d.value">{{d.displayText}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+
+            <div class="col-sm-12 col-md-6 col-lg-6">
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label"> For BTEB </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="bteb" id="bteb"
+                                [(ngModel)]="model.bteb" />
+                            <label class="custom-control-label mt-2" for="bteb"></label>
+                        </div>
+                    </div>
+
+                    <label class="col-md-4 col-form-label"> Session Changed </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="sessionChanged"
+                                id="sessionChanged" [(ngModel)]="model.isSessionChanged" />
+                            <label class="custom-control-label mt-2" for="sessionChanged"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="session">BTEB Session </label>
+                    <div class="col-md-8">
+                        <select class="form-select form-control" name="session" id="session"
+                            [(ngModel)]="model.btebSessionId">
+                            <option *ngFor="let s of btebSessions" [value]="s.value">{{s.displayText}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-4 col-form-label" for="classRoll">Class Roll</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="classRoll" id="classRoll"
+                            [(ngModel)]="model.classRoll" required #classRollModel="ngModel" #classRollEl disabled />
+                        <abp-validation-summary [control]="classRollModel"
+                            [controlEl]="classRollEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label"> BTEB Admitted </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="btebAdmitted" id="btebAdmitted"
+                                [(ngModel)]="model.btebAdmitted" />
+                            <label class="custom-control-label mt-2" for="btebAdmitted"></label>
+                        </div>
+                    </div>
+
+                    <label class="col-md-4 col-form-label"> BTEB Registered </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="btebRegistered"
+                                id="btebRegistered" [(ngModel)]="model.btebRegistered" />
+                            <label class="custom-control-label mt-2" for="btebRegistered"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="period">Registration Number</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="btebRegistrationNumber"
+                            id="btebRegistrationNumber" [(ngModel)]="model.btebRegistrationNumber" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label"> Active </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="isActive" id="isActive"
+                                [(ngModel)]="model.isActive" />
+                            <label class="custom-control-label mt-2" for="isActive"></label>
+                        </div>
+                    </div>
+                    <label class="col-md-4 col-form-label"> Participate in Exam </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="didExam" id="didExam"
+                                [(ngModel)]="model.didExam" />
+                            <label class="custom-control-label mt-2" for="didExam"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="resultStatus">Result Status </label>
+                    <div class="col-md-8">
+                        <select class="form-select form-control" name="resultStatus" id="resultStatus"
+                            [(ngModel)]="model.resultStatus">
+                            <option *ngFor="let rs of resultStatuses" [value]="rs.value">{{rs.displayText}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="period">Result</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="result" id="result" [(ngModel)]="model.result" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="courseFee">Course Fee</label>
+                    <div class="col-md-8">
+                        <input type="number" class="form-control" name="courseFee" id="courseFee"
+                            [(ngModel)]="model.courseFee" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="discount">Discount</label>
+                    <div class="col-md-8">
+                        <input type="number" class="form-control" name="discount" id="discount"
+                            [(ngModel)]="model.discount" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="runningProgram">Running Program </label>
+                    <div class="col-md-8">
+                        <select class="form-select form-control" name="runningProgram" id="runningProgram"
+                            [(ngModel)]="model.runningProgram">
+                            <option *ngFor="let rp of officePrograms" [value]="rp.value">{{rp.displayText}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="remarks">Remarks</label>
+                    <div class="col-md-8">
+                        <textarea class="form-control" name="remarks" id="remarks" [(ngModel)]="model.remarks" rows="3"></textarea>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+        <!-- <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="period">Session Period</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="period" id="period" required
+                    [(ngModel)]="model.sessionPeriod" #periodModel="ngModel" #periodEl />
+                <abp-validation-summary [control]="periodModel" [controlEl]="periodEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                Examination Held
+            </label>
+            <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="examinationHeld" id="examinationHeld"
+                        [(ngModel)]="model.isExaminationHeld" />
+                    <label class="custom-control-label mt-2" for="examinationHeld"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="date">Examination Date</label>
+            <div class="col-md-9">
+                <p-datepicker [(ngModel)]="examinationDate" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                    dateFormat="dd/M/yy" [showIcon]="true" [showClear]="true" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                Result Published
+            </label>
+            <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="resultPublished" id="resultPublished"
+                        [(ngModel)]="model.isResultPublished" />
+                    <label class="custom-control-label mt-2" for="resultPublished"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="resultPublishedDate">Result Published Date</label>
+            <div class="col-md-9">
+                <p-datepicker [(ngModel)]="resultPublishedDate" [ngModelOptions]="{standalone: true}"
+                    [readonlyInput]="true" dateFormat="dd/M/yy" [showIcon]="true" [showClear]="true" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                Certificate Provided
+            </label>
+            <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="certificateProvided"
+                        id="certificateProvided" [(ngModel)]="model.isCertificateProvided" />
+                    <label class="custom-control-label mt-2" for="certificateProvided"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="certificateDate">Certificate Date</label>
+            <div class="col-md-9">
+                <p-datepicker [(ngModel)]="certificateDate" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                    dateFormat="dd/M/yy" [showIcon]="true" [showClear]="true" />
+            </div>
+        </div> -->
+    </div>
+    <abp-modal-footer [cancelDisabled]="saving"
+        [saveDisabled]="!entryModal.form.valid || saving || (model.bteb && !model.btebSessionId)"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

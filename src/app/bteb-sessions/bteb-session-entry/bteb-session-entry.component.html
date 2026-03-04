@@ -1,0 +1,87 @@
+<form class="form-horizontal" autocomplete="off" #entryModal="ngForm" (ngSubmit)="save()">
+    <abp-modal-header title="Create/Edit department" (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="name">Session Name</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="name" id="name" required [(ngModel)]="model.sessionName"
+                    #nameModel="ngModel" #nameEl />
+                <abp-validation-summary [control]="nameModel" [controlEl]="nameEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="period">Session Period</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="period" id="period" required
+                    [(ngModel)]="model.sessionPeriod" #periodModel="ngModel" #periodEl />
+                <abp-validation-summary [control]="periodModel" [controlEl]="periodEl"></abp-validation-summary>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                Examination Held
+            </label>
+            <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="examinationHeld" id="examinationHeld"
+                        [(ngModel)]="model.isExaminationHeld" />
+                    <label class="custom-control-label mt-2" for="examinationHeld"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="date">Examination Date</label>
+            <div class="col-md-9">
+                <p-datepicker [(ngModel)]="examinationDate" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                    dateFormat="dd/M/yy" [showIcon]="true" [showClear]="true" />
+            </div>
+        </div>
+
+             <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                Result Published
+            </label>
+            <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="resultPublished" id="resultPublished"
+                        [(ngModel)]="model.isResultPublished" />
+                    <label class="custom-control-label mt-2" for="resultPublished"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="resultPublishedDate">Result Published Date</label>
+            <div class="col-md-9">
+                <p-datepicker [(ngModel)]="resultPublishedDate" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                    dateFormat="dd/M/yy" [showIcon]="true" [showClear]="true" />
+            </div>
+        </div>
+
+             <div class="form-group row">
+            <label class="col-md-3 col-form-label">
+                Certificate Provided
+            </label>
+            <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="certificateProvided" id="certificateProvided"
+                        [(ngModel)]="model.isCertificateProvided" />
+                    <label class="custom-control-label mt-2" for="certificateProvided"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="certificateDate">Certificate Date</label>
+            <div class="col-md-9">
+                <p-datepicker [(ngModel)]="certificateDate" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                    dateFormat="dd/M/yy" [showIcon]="true" [showClear]="true" />
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!entryModal.form.valid || saving"
+        (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
+</form>

@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { BrandsRoutingModule } from './brands-routing.module';
 import { BrandsComponent } from './brands.component';
 import { SharedModule } from '@shared/shared.module';
+import { BrandEntryComponent } from './brand-entry/brand-entry.component';
 
 
 @NgModule({
   declarations: [
-    BrandsComponent
+    BrandsComponent,
+    BrandEntryComponent
   ],
   imports: [
     SharedModule,

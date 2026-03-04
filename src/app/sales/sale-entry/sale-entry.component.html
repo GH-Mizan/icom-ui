@@ -8,7 +8,15 @@
                     <label class="col-md-3 col-form-label" for="date">Date</label>
                     <div class="col-md-9">
                         <p-datepicker [(ngModel)]="date" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
-                            dateFormat="dd/M/yy" (ngModelChange)="list()" [showIcon]="true" />
+                            dateFormat="dd/M/yy" [showIcon]="true" />
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="invoiceDate">Invoice Date</label>
+                    <div class="col-md-9">
+                        <p-datepicker [(ngModel)]="invoiceDate" [ngModelOptions]="{standalone: true}" [readonlyInput]="true"
+                            dateFormat="dd/M/yy" [showIcon]="true" />
                     </div>
                 </div>
 
@@ -16,7 +24,7 @@
                     <label class="col-md-3 col-form-label" for="invoiceNumber"> Invoice Number </label>
                     <div class="col-md-9">
                         <input type="text" class="form-control" name="invoiceNumber" id="invoiceNumber"
-                            [(ngModel)]="model.invoiceNumber" #invModel="ngModel" #invEl />
+                            [(ngModel)]="model.invoiceNumber" (ngModelChange)="onInvoicedChanged()" #invModel="ngModel" #invEl />
                         <abp-validation-summary [control]="invModel" [controlEl]="invEl"></abp-validation-summary>
                     </div>
                 </div>
@@ -233,6 +241,6 @@
         </div>
 
     </div>
-    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!saleEtryModal.form.valid || !selectedClient || saleDetails.length === 0"
+    <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!saleEtryModal.form.valid || saving || !selectedClient || saleDetails.length === 0 || !model.netAmount"
         (onCancelClick)="bsModalRef.hide()"></abp-modal-footer>
 </form>
