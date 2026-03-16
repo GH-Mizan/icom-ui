@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
-                    <h1>Clients</h1>
+                    <h1>Assets</h1>
                 </div>
                 <div class="col-6 text-right">
                     <a href="javascript:;" class="btn bg-blue" (click)="create()">
@@ -43,17 +43,14 @@
                             [tableStyle]="{ 'min-width': '50rem' }">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th> Entry Date</th>
+                                    <th> Purchase Date </th>
                                     <th> Name </th>
-                                    <th> Identification </th>
-                                    <th> ContactNumber </th>
-                                    <th> WhatsAppNumber</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Type</th>
-                                    <th>Remarks</th>
+                                    <th style="width: 300px;"> Description</th>
+                                    <th> Condition</th>
+                                    <th> Value</th>
+                                    <th> Remarks</th>
                                     <th class="text-center">
-                                        Actions
+                                        {{ "Actions" }}
                                     </th>
                                 </tr>
                             </ng-template>
@@ -61,37 +58,32 @@
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
                                     <td>
-                                        <span>{{ record.entryDate | date: 'dd-MMM-yy' }}</span>
+                                        <span>{{ record.date | date: 'dd-MMM-yyyy' }}</span>
                                     </td>
                                     <td>
                                         <span>{{ record.name }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.identificationName }}</span>
+                                        <span> {{record.description}} </span>
                                     </td>
                                     <td>
-                                        <span>{{ record.contactNumber }}</span>
+                                        <span>{{ record.conditionText }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.whatsAppNumber }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.email }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.address }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.typeText }}</span>
+                                        <span> {{record.value}} </span>
                                     </td>
                                     <td>
                                         <span>{{ record.remarks }}</span>
                                     </td>
+                                    
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
 
+                                        <button type="button" class="btn btn-sm bg-danger mx-1" (click)="delete(record)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             </ng-template>

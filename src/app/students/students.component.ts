@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Injector, ViewChild } from '@angular/core';
-import { StudentEntryInputDto, StudentOutputDto, StudentServiceProxy } from '@shared/service-proxies/service-proxies';
+import { ChangeDetectorRef, Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BtebSessionServiceProxy, ComboboxItemDto, StudentEntryInputDto, StudentOutputDto, StudentServiceProxy } from '@shared/service-proxies/service-proxies';
 import { Table } from 'primeng/table';
 import { Paginator } from "primeng/paginator";
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
@@ -16,20 +16,41 @@ import { StudentEntryComponent } from './student-entry/student-entry.component';
   animations: [appModuleAnimation()],
 })
 
-export class StudentsComponent extends PagedListingComponentBase<StudentOutputDto> {
+export class StudentsComponent extends PagedListingComponentBase<StudentOutputDto> implements OnInit {
 
   @ViewChild('dataTable', { static: true }) dataTable: Table;
   @ViewChild('paginator', { static: true }) paginator: Paginator;
 
   searchText: string = "";
+  isBteb?: boolean = null;
+  isBtebAdmitted: boolean = null;
+  isBtebRegistered: boolean = null;
+  courseCompleted: boolean = null;
+  certificateDistributed: boolean = null;
+  btebSessionId: number = null;
+  courseId: number = null;
+  btebSessions: ComboboxItemDto[] = [];
+  courses: ComboboxItemDto[] = [];
 
   constructor(
     injector: Injector,
     private readonly _studentService: StudentServiceProxy,
+    private readonly _btebSession: BtebSessionServiceProxy,
     private readonly _modalService: BsModalService,
     cd: ChangeDetectorRef
   ) {
     super(injector, cd);
+  }
+
+  ngOnInit(): void {
+    this._studentService.getIccCoursesSelectList().subscribe(res => {
+      this.courses = res;
+      this.cd.detectChanges();
+    });
+    this._btebSession.getBtebSessionsSelectList().subscribe(res => {
+      this.btebSessions = res;
+      this.cd.detectChanges();
+    });
   }
 
   list(event?: LazyLoadEvent): void {
@@ -44,8 +65,23 @@ export class StudentsComponent extends PagedListingComponentBase<StudentOutputDt
       }
     }
 
-    this.primengTableHelper.showLoadingIndicator();
+    this.primengTableHelper.isLoading = true;
+    const isBteb = this.isBteb?.toString() == "true" ? true : this.isBteb?.toString() == "false" ? false : undefined;
+    const isBtebAdmitted = this.isBtebAdmitted?.toString() == "true" ? true : this.isBtebAdmitted?.toString() == "false" ? false : undefined;
+    const isBtebRegistered = this.isBtebRegistered?.toString() == "true" ? true : this.isBtebRegistered?.toString() == "false" ? false : undefined;
+    const courseCompleted = this.courseCompleted?.toString() == "true" ? true : this.courseCompleted?.toString() == "false" ? false : undefined;
+    const certificateDistributed = this.certificateDistributed?.toString() == "true" ? true : this.certificateDistributed?.toString() == "false" ? false : undefined;
+    const sessionId = (this.btebSessionId == null || this.btebSessionId.toString() == "null") ? undefined : this.btebSessionId;
+    const courseId = (this.courseId == null || this.courseId.toString() == "null") ? undefined : this.courseId;
+
     this._studentService.getPaginatedStudents(
+      isBteb,
+      isBtebAdmitted,
+      isBtebRegistered,
+      courseCompleted,
+      certificateDistributed,
+      sessionId,
+      courseId,
       this.searchText,
       this.primengTableHelper.getSkipCount(this.paginator, event),
       this.primengTableHelper.getMaxResultCount(this.paginator, event)
@@ -57,11 +93,23 @@ export class StudentsComponent extends PagedListingComponentBase<StudentOutputDt
       .subscribe((result) => {
         this.primengTableHelper.records = result.items;
         this.primengTableHelper.totalRecordsCount = result.totalCount;
-        this.primengTableHelper.hideLoadingIndicator();
+        this.primengTableHelper.isLoading = false;
         this.cd.detectChanges();
       });
 
 
+  }
+
+  clearFilters() {
+    this.searchText = "";
+    this.isBteb = null;
+    this.isBtebAdmitted = null;
+    this.isBtebRegistered = null;
+    this.courseCompleted = null;
+    this.certificateDistributed = null;
+    this.btebSessionId = null;
+    this.courseId = null;
+    this.list();
   }
 
   create() {

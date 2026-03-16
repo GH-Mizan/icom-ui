@@ -25,6 +25,9 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.InvoiceServiceProxy,
         ApiServiceProxies.BtebSessionServiceProxy,
         ApiServiceProxies.StudentServiceProxy,
+        ApiServiceProxies.AssetServiceProxy,
+        ApiServiceProxies.ServiceExpenseServiceProxy,
+        ApiServiceProxies.SetupExpenseServiceProxy,
         { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true },
     ],
 })

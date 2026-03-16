@@ -44,9 +44,7 @@ export class PricelistsComponent extends PagedListingComponentBase<PricelistOutp
         this.loadBrands(),
         this.loadCategories()
       ]
-    ).then(() => {
-      this.cd.detectChanges();
-    });
+    );
   }
 
   list(event?: LazyLoadEvent): void {

@@ -62,7 +62,6 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
         injector: Injector,
         public bsModalRef: BsModalRef,
         private readonly _pricelistService: PricelistServiceProxy,
-        private readonly _productService: ProductServiceProxy,
         private readonly _salesService: SalesServiceProxy,
         private readonly _clientService: ClientServiceProxy,
         private cd: ChangeDetectorRef

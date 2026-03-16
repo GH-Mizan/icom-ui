@@ -50,6 +50,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             new MenuItem('Services', '/app/services', 'fas fa-home'),
             new MenuItem('Clients', '/app/clients', 'fas fa-home'),
             new MenuItem('Inventories', '/app/inventories', 'fas fa-home'),
+            new MenuItem('Service Expenses', '/app/service-expences', 'far fa-circle'),
             new MenuItem('Students', '/app/students', 'fas fa-home'),
             new MenuItem(this.l('Roles'), '/app/roles', 'fas fa-theater-masks', 'Pages.Roles'),
             new MenuItem(this.l('Tenants'), '/app/tenants', 'fas fa-building', 'Pages.Tenants'),
@@ -59,6 +60,8 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
                 new MenuItem('Categories', '/app/categories', 'far fa-circle'),
                 new MenuItem('Suppliers', '/app/suppliers', 'far fa-circle'),
                 new MenuItem('BTEB Sessions', '/app/bteb-sessions', 'far fa-circle'),
+                new MenuItem('Assets', '/app/assets', 'far fa-circle'),
+                new MenuItem('Setup Expenses', '/app/setup-expences', 'far fa-circle'),
             ]),
         ];
     }

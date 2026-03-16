@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
     imports: [
         RouterModule.forChild([
             {
-                path: '',
+                path: '',   
                 component: AppComponent,
                 children: [
                     {
@@ -55,8 +55,12 @@ import { AppComponent } from './app.component';
                     { path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.InvoicesModule) },
                     { path: 'bteb-sessions', loadChildren: () => import('./bteb-sessions/bteb-sessions.module').then(m => m.BtebSessionsModule) },
                     { path: 'students', loadChildren: () => import('./students/students.module').then(m => m.StudentsModule) },
+                    { path: 'assets', loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule) },
+                    { path: 'service-expences', loadChildren: () => import('./service-expenses/service-expenses.module').then(m => m.ServiceExpensesModule) },
+                    { path: 'setup-expences', loadChildren: () => import('./setup-expenses/setup-expenses.module').then(m => m.SetupExpensesModule) },
                 ],
             },
+            
             
             
             

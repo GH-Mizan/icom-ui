@@ -18,8 +18,7 @@
             <div class="card table-wrapper">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-6">&emsp;</div>
-                        <div class="col-md-6">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <button type="button" class="btn bg-blue" (click)="list()">
@@ -31,6 +30,90 @@
 
                             </div>
                         </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label" for="client">Client</label>
+                                <div class="col-8">
+                                    <p-select [options]="clients" [(ngModel)]="selectedClient" optionLabel="name"
+                                        [filter]="true" filterBy="displayText" [showClear]="true" placeholder=""
+                                        class="w-full w-100" name="client" id="client" (ngModelChange)="list()">
+                                        <ng-template #selectedItem let-selectedOption>
+                                            <div class="flex items-center gap-2">
+                                                <div>{{ selectedOption.displayText }}</div>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template let-client #item>
+                                            <div class="flex items-center gap-2">
+                                                <div>{{ client.displayText }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label"> Due Only </label>
+                                <div class="col-md-8">
+                                    <select class="form-select form-control" [(ngModel)]="dueOnly"
+                                        (ngModelChange)="list()">
+                                        <option [value]="true">Yes</option>
+                                        <option [value]="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label"> LifeTime Due </label>
+                                <div class="col-md-8">
+                                    <select class="form-select form-control" [(ngModel)]="lifeTimeDue"
+                                        (ngModelChange)="list()">
+                                        <option [value]="true">Yes</option>
+                                        <option [value]="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-12">
+                            <div class="form-group row">
+                                <div class="form-check col-md-4">
+                                    <input class="form-check-input" type="checkbox" value="" id="monthlySearch"
+                                        [checked]="monthlySearch" (change)="onMonthlySearchChange($event)">
+                                    <label class="form-check-label" for="monthlySearch">
+                                        Monthly Search
+                                    </label>
+                                </div>
+                                <div class="col-md-4" *ngIf="monthlySearch">
+                                    <select class="form-select form-control" name="year" id="year" [(ngModel)]="year">
+                                        <option *ngFor="let y of years" [value]="y.value">{{y.displayText}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4" *ngIf="monthlySearch">
+                                    <select class="form-select form-control" name="month" id="month"
+                                        [(ngModel)]="month">
+                                        <option *ngFor="let m of months" [value]="m.value">{{m.displayText}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4" *ngIf="!monthlySearch">
+                                    <p-datepicker [(ngModel)]="startDate" [readonlyInput]="true" dateFormat="dd/M/yy"
+                                        [showIcon]="true" />
+                                </div>
+                                <div class="col-md-4" *ngIf="!monthlySearch">
+                                    <p-datepicker [(ngModel)]="endDate" [readonlyInput]="true" dateFormat="dd/M/yy"
+                                        [showIcon]="true" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <button type="button" class="btn btn-primary" (click)="list()">Search</button>
+                            <button type="button" class="btn btn-default mx-1" (click)="clearFilters()">Clear</button>
+                        </div>
+
                     </div>
 
                 </div>
@@ -38,7 +121,7 @@
                     <!--<Primeng-TurboTable-Start>-->
                     <div class="primeng-datatable-container">
                         <p-table #dataTable sortMode="multiple" (onLazyLoad)="list($event)"
-                            [value]="primengTableHelper.records"
+                            [value]="primengTableHelper.records" [loading]="primengTableHelper.isLoading"
                             rows="{{ primengTableHelper.defaultRecordsCountPerPage }}" [paginator]="false" [lazy]="true"
                             [tableStyle]="{ 'min-width': '50rem' }">
                             <ng-template pTemplate="header">
@@ -69,7 +152,7 @@
                                     <td>
                                         <span>{{ record.clientName }}</span>
                                     </td>
-                                     <td>
+                                    <td>
                                         <span>{{record.totalAmount | number: '1.2-2'}}</span>
                                     </td>
                                     <td>
@@ -102,12 +185,13 @@
                                             <i class="fa fa-history"></i>
                                         </button>
 
-                                        <button *ngIf="paymentStatus != 1" type="button"
-                                            class="btn btn-sm bg-primary" (click)="makePaymentReceive(record)">
+                                        <button *ngIf="paymentStatus != 1" type="button" class="btn btn-sm bg-primary"
+                                            (click)="makePaymentReceive(record)">
                                             <i class="fas fa-dollar-sign"></i>
                                         </button>
 
-                                        <button type="button" class="btn btn-sm bg-danger mx-1" (click)="delete(record)">
+                                        <button type="button" class="btn btn-sm bg-danger mx-1"
+                                            (click)="delete(record)">
                                             <i class="fas fa-trash"></i>
                                         </button>
 

@@ -258,9 +258,30 @@
                 </div>
 
                 <div class="form-group row">
+                    <label class="col-md-4 col-form-label"> Course Completed </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="courseCompleted" id="courseCompleted"
+                                [(ngModel)]="model.courseCompleted" />
+                            <label class="custom-control-label mt-2" for="courseCompleted"></label>
+                        </div>
+                    </div>
+
+                    <label class="col-md-4 col-form-label"> Certificate Distributed </label>
+                    <div class="col-md-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" name="certificateDistributed"
+                                id="certificateDistributed" [(ngModel)]="model.certificateDistributed" />
+                            <label class="custom-control-label mt-2" for="certificateDistributed"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label class="col-md-4 col-form-label" for="remarks">Remarks</label>
                     <div class="col-md-8">
-                        <textarea class="form-control" name="remarks" id="remarks" [(ngModel)]="model.remarks" rows="3"></textarea>
+                        <textarea class="form-control" name="remarks" id="remarks" [(ngModel)]="model.remarks"
+                            rows="3"></textarea>
                     </div>
                 </div>
 

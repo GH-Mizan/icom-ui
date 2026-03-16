@@ -18,6 +18,15 @@
             </div>
         </div>
 
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="identificationName">Identification</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="identificationName" id="identificationName" required [(ngModel)]="model.identificationName"
+                    #identificationNameModel="ngModel" #identificationNameEl />
+                <abp-validation-summary [control]="identificationNameModel" [controlEl]="identificationNameEl"></abp-validation-summary>
+            </div>
+        </div>
+
         <div class="form-group row">
             <label class="col-md-3 col-form-label" for="contactNumber">Contact Number</label>
             <div class="col-md-9">

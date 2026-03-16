@@ -372,7 +372,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
         const logo = await Utils.getImageDataUrl('assets/img/logo.png');
         const model = this.model;
         model.clientId = parseInt(this.selectedClient.value);
-        const clientContact = await firstValueFrom(this._clientService.getClientContactNumber(model.clientId));
+        const clientInfo = await firstValueFrom(this._clientService.getClientInfo(model.clientId));
 
 
         this.pdfMake.tableLayouts = {
@@ -414,7 +414,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                             widths: [80, '*', 80, 80],
                             body: [
                                 [{ text: 'Invoice:', style: ['invoiceHeaderLabel'] }, { text: model.invoiceNumber, style: ['invoiceHeaderText'] }, { text: 'Date:', style: ['invoiceHeaderLabel', 'textRight'] }, { text: moment(this.date).format('D-MMM-YY').toString(), style: ['invoiceHeaderText', 'textRight'] }],
-                                [{ text: 'Client:', style: ['invoiceHeaderLabel'] }, { text: this.selectedClient.displayText, style: ['invoiceHeaderText'] }, { text: 'Contact No.', style: ['invoiceHeaderLabel', 'textRight'] }, { text: clientContact, style: ['invoiceHeaderText', 'textRight'] }],
+                                [{ text: 'Client:', style: ['invoiceHeaderLabel'] }, { text: clientInfo.name, style: ['invoiceHeaderText'] }, { text: 'Contact No.', style: ['invoiceHeaderLabel', 'textRight'] }, { text: clientInfo.contactNumber, style: ['invoiceHeaderText', 'textRight'] }],
                             ]
                         }
                     },
@@ -524,7 +524,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                             widths: [80, '*', 80, 80],
                             body: [
                                 [{ text: 'Invoice:', style: ['invoiceHeaderLabel'] }, { text: model.invoiceNumber, style: ['invoiceHeaderText'] }, { text: 'Date:', style: ['invoiceHeaderLabel', 'textRight'] }, { text: moment(this.date).format('D-MMM-YY').toString(), style: ['invoiceHeaderText', 'textRight'] }],
-                                [{ text: 'Client:', style: ['invoiceHeaderLabel'] }, { text: this.selectedClient.displayText, style: ['invoiceHeaderText'] }, { text: 'Contact No.', style: ['invoiceHeaderLabel', 'textRight'] }, { text: clientContact, style: ['invoiceHeaderText', 'textRight'] }],
+                                [{ text: 'Client:', style: ['invoiceHeaderLabel'] }, { text: clientInfo.name, style: ['invoiceHeaderText'] }, { text: 'Contact No.', style: ['invoiceHeaderLabel', 'textRight'] }, { text: clientInfo.contactNumber, style: ['invoiceHeaderText', 'textRight'] }],
                             ]
                         }
                     },
@@ -676,8 +676,8 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                 body.push(
                     [
                         { text: serviceText, fontSize: 10 },
-                        { text: `${Utils.thousandsSeparator(item.unitPrice)}`, style: ['cell_style'] },
                         { text: item.quantity, style: ['cell_style'] },
+                        { text: `${Utils.thousandsSeparator(item.unitPrice)}`, style: ['cell_style'] },
                         { text: `${Utils.thousandsSeparator(item.totalAmount)}`, style: ['cellAmount'] }
                     ]
                 );
