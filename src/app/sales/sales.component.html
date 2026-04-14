@@ -2,10 +2,19 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-6">
+                <div class="col-3">
                     <h1>Sales</h1>
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-2">
+                    <span>Total Sales: {{totalSales}}</span>
+                </div>
+                <div class="col-2">
+                    <span>Total Paid: {{totalPaid}}</span>
+                </div>
+                <div class="col-3">
+                    <span>Total Due: {{totalDue}} of {{overallDue}}</span>
+                </div>
+                <div class="col-2 text-right">
                     <a href="javascript:;" class="btn bg-blue" (click)="create()">
                         <i class="fa fa-plus-square"></i>
                     </a>
@@ -77,39 +86,50 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <div class="form-group row">
+                                <div class="form-check col-12">
+                                    <input class="form-check-input" type="checkbox" value="" id="includeDateSearch"
+                                        [checked]="includeDateSearch" (change)="onIncludeDateSearchChange($event)">
+                                    <label class="form-check-label" for="includeDateSearch">
+                                        Inlude Date Search
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-lg-8 col-md-8 col-sm-12">
                             <div class="form-group row">
-                                <div class="form-check col-md-4">
+                                <div class="form-check col-md-2">
                                     <input class="form-check-input" type="checkbox" value="" id="monthlySearch"
                                         [checked]="monthlySearch" (change)="onMonthlySearchChange($event)">
                                     <label class="form-check-label" for="monthlySearch">
                                         Monthly Search
                                     </label>
                                 </div>
-                                <div class="col-md-4" *ngIf="monthlySearch">
-                                    <select class="form-select form-control" name="year" id="year" [(ngModel)]="year">
+                                <div class="col-md-5" *ngIf="monthlySearch">
+                                    <select class="form-select form-control" name="year" id="year" [(ngModel)]="year" (ngModelChange)="list()">
                                         <option *ngFor="let y of years" [value]="y.value">{{y.displayText}}
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-md-4" *ngIf="monthlySearch">
+                                <div class="col-md-5" *ngIf="monthlySearch">
                                     <select class="form-select form-control" name="month" id="month"
-                                        [(ngModel)]="month">
+                                        [(ngModel)]="month" (ngModelChange)="list()">
                                         <option *ngFor="let m of months" [value]="m.value">{{m.displayText}}
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-md-4" *ngIf="!monthlySearch">
+                                <div class="col-md-5" *ngIf="!monthlySearch">
                                     <p-datepicker [(ngModel)]="startDate" [readonlyInput]="true" dateFormat="dd/M/yy"
                                         [showIcon]="true" />
                                 </div>
-                                <div class="col-md-4" *ngIf="!monthlySearch">
+                                <div class="col-md-5" *ngIf="!monthlySearch">
                                     <p-datepicker [(ngModel)]="endDate" [readonlyInput]="true" dateFormat="dd/M/yy"
                                         [showIcon]="true" />
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div class="col-lg-2 col-md-2 col-sm-12">
                             <button type="button" class="btn btn-primary" (click)="list()">Search</button>
                             <button type="button" class="btn btn-default mx-1" (click)="clearFilters()">Clear</button>
                         </div>

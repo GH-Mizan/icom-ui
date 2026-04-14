@@ -135,7 +135,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
     }
 
     async loadClients() {
-        this.clients = await firstValueFrom(this._clientService.getClientsSelectList());
+        this.clients = await firstValueFrom(this._clientService.getClientsSelectList(null));
         this.cd.detectChanges();
     }
 

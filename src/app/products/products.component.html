@@ -108,9 +108,9 @@
                   <span>{{ record.remarks }}</span>
                 </td>
                 <td class="text-center">
-                  <!-- <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)" *ngIf="isGranted('Pages.Client.Edit')">
-                      <i class="fas fa-pencil-alt"></i>
-                    </button> -->
+                  <button type="button" class="btn btn-sm bg-primary" (click)="edit(record.id)">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
                   <!-- <button type="button" class="btn btn-sm bg-success" (click)="openCustomerPriceModal(record)">
                       <i class="fas fa-file-invoice-dollar"></i>
                     </button> -->
@@ -149,5 +149,5 @@
         </div>
       </div>
     </div>
-</section>
+  </section>
 </div>

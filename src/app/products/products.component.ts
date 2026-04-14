@@ -93,10 +93,16 @@ export class ProductsComponent extends PagedListingComponentBase<ProductOutputDt
 
   create() {
     const product = new ProductEntryDto();
-    this.showProductEntryDialog(product);
+    this.showEntryDialog(product);
   }
 
-  private showProductEntryDialog(product: ProductEntryDto): void {
+   edit(id: number) {
+      this._productsService.get(id).subscribe(res => {
+        this.showEntryDialog(res);
+      });
+    }
+
+  private showEntryDialog(product: ProductEntryDto): void {
     let productEntryDialog: BsModalRef;
     productEntryDialog = this._modalService.show(
       ProductEntryComponent,

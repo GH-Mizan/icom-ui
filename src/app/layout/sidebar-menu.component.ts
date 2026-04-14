@@ -46,7 +46,10 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             new MenuItem('Invoices', '/app/invoices', 'fas fa-home'),
             new MenuItem('Products', '/app/products', 'fas fa-home'),
             new MenuItem('Purchases', '/app/pricelists', 'fas fa-home'),
-            new MenuItem('Sales', '/app/sales', 'fas fa-home'),
+            new MenuItem('Sales', '', 'fas fa-circle', '', [
+                new MenuItem('Sales', '/app/sales', 'far fa-circle'),
+                new MenuItem('Sales Details', '/app/sales/details', 'far fa-circle')
+            ]),
             new MenuItem('Services', '/app/services', 'fas fa-home'),
             new MenuItem('Clients', '/app/clients', 'fas fa-home'),
             new MenuItem('Inventories', '/app/inventories', 'fas fa-home'),

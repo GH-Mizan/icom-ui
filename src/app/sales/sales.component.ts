@@ -6,7 +6,7 @@ import { PagedListingComponentBase } from '@shared/paged-listing-component-base'
 import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 import { LazyLoadEvent } from "primeng/api";
 import { finalize } from "rxjs/operators";
-import { PricelistServiceProxy, SaleOutputDto, SalesEntryDto, SalesServiceProxy, DueReceivedEntryDto, ComboboxItemDto, ClientServiceProxy } from '@shared/service-proxies/service-proxies';
+import { PricelistServiceProxy, SaleOutputDto, SalesEntryDto, SalesServiceProxy, DueReceivedEntryDto, ComboboxItemDto, ClientServiceProxy, SalesEntryInputDto } from '@shared/service-proxies/service-proxies';
 import { SaleEntryComponent } from './sale-entry/sale-entry.component';
 import { DueReceivedHistoryComponent } from './due-received-histories/due-received-histories.component';
 import { DueReceivedEntryComponent } from './due-received-entry/due-received-entry.component';
@@ -33,9 +33,14 @@ export class SalesComponent extends PagedListingComponentBase<SaleOutputDto> imp
   years: ComboboxItemDto[];
   month: number;
   year: number;
+  includeDateSearch: boolean = true;
   dateRangeSearch: boolean = false;
   monthlySearch: boolean = true;
   lifeTimeDue: boolean = false;
+  totalSales: number;
+  totalPaid: number;
+  totalDue: number;
+  overallDue: number;
   /**
    *
    */
@@ -51,7 +56,7 @@ export class SalesComponent extends PagedListingComponentBase<SaleOutputDto> imp
   }
 
   ngOnInit(): void {
-    this._clientService.getClientsSelectList().subscribe(res => {
+    this._clientService.getClientsSelectList(null).subscribe(res => {
       this.clients = res;
       this.cd.detectChanges();
     });
@@ -70,14 +75,14 @@ export class SalesComponent extends PagedListingComponentBase<SaleOutputDto> imp
       if (
         this.primengTableHelper.records &&
         this.primengTableHelper.records.length > 0
-      ) {
-        return;
-      }
+      ) { return; }
     }
     this.primengTableHelper.isLoading = true;
     //this.primengTableHelper.showLoadingIndicator();
     this._salesService.getPaginated(
+      this.includeDateSearch,
       this.selectedClient ? parseInt(this.selectedClient.value) : undefined,
+      undefined,
       this.dueOnly,
       this.monthlySearch ? undefined : moment(this.startDate),
       this.monthlySearch ? undefined : moment(this.endDate),
@@ -96,12 +101,27 @@ export class SalesComponent extends PagedListingComponentBase<SaleOutputDto> imp
       })
     )
       .subscribe((result) => {
-        this.primengTableHelper.records = result.items;
-        this.primengTableHelper.totalRecordsCount = result.totalCount;
+        this.primengTableHelper.records = result.sales.items;
+        this.primengTableHelper.totalRecordsCount = result.sales.totalCount;
+        this.totalSales = result.totalNetSales;
+        this.totalPaid = result.totalPaid;
+        this.totalDue = result.totalDue;
+        this.overallDue = result.overallDue;
         //this.primengTableHelper.hideLoadingIndicator();
         this.primengTableHelper.isLoading = false;
         this.cd.detectChanges();
       });
+  }
+
+  onIncludeDateSearchChange(event) {
+    if (event.target.checked) {
+      this.includeDateSearch = true;
+    }
+    else {
+      this.includeDateSearch = false;
+    }
+
+    this.list();
   }
 
   onMonthlySearchChange(event) {
@@ -127,6 +147,7 @@ export class SalesComponent extends PagedListingComponentBase<SaleOutputDto> imp
     this.month = now.getMonth() + 1; // getMonth() returns 0-11, so add 1
     this.year = now.getFullYear();
     this.dateRangeSearch = false;
+    this.includeDateSearch = true;
     this.monthlySearch = true;
     this.lifeTimeDue = false;
     this.cd.detectChanges();
@@ -134,12 +155,16 @@ export class SalesComponent extends PagedListingComponentBase<SaleOutputDto> imp
   }
 
   create() {
-    const sale = new SalesEntryDto();
+    const sale = new SalesEntryInputDto();
+    sale.sales = new SalesEntryDto();
+    sale.salesDetails = [];
     this.showSaleEntryDialog(sale);
   }
 
   edit(id: number) {
-
+    this._salesService.get(id).subscribe(res=> {
+          this.showSaleEntryDialog(res);
+      })
   }
 
   showPaymentHistory(id: number) {
@@ -193,17 +218,25 @@ export class SalesComponent extends PagedListingComponentBase<SaleOutputDto> imp
   }
 
   delete(record: SaleOutputDto) {
-
+    abp.message.confirm(`You want to delete this. record`, 'Are you sure?', (Ok) => {
+      if (Ok) {
+        this._salesService.salesRemove(record.id).subscribe(() => {
+          abp.notify.success("Successfully Removed");
+          this.refresh();
+        })
+      }
+    })
   }
 
-  private showSaleEntryDialog(sale: SalesEntryDto): void {
+  private showSaleEntryDialog(input: SalesEntryInputDto): void {
     let saleEntryDialog: BsModalRef;
     saleEntryDialog = this._modalService.show(
       SaleEntryComponent,
       {
         class: "modal-xl",
         initialState: {
-          model: sale,
+          model: input.sales,
+          saleDetails: input.salesDetails
         },
       }
     );

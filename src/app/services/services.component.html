@@ -2,10 +2,19 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-6">
+                <div class="col-3">
                     <h1>Services</h1>
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-2">
+                    <span>Total Service: {{totalServiceCharge}}</span>
+                </div>
+                <div class="col-2">
+                    <span>Total Paid: {{totalPaid}}</span>
+                </div>
+                <div class="col-3">
+                    <span>Total Due: {{totalDue}} of {{overallDue}}</span>
+                </div>
+                <div class="col-2 text-right">
                     <a href="javascript:;" class="btn bg-blue" (click)="create()">
                         <i class="fa fa-plus-square"></i>
                     </a>
@@ -100,14 +109,14 @@
                                     </label>
                                 </div>
                                 <div class="col-md-4" *ngIf="monthlySearch">
-                                    <select class="form-select form-control" name="year" id="year" [(ngModel)]="year">
+                                    <select class="form-select form-control" name="year" id="year" [(ngModel)]="year" (ngModelChange)="list()">
                                         <option *ngFor="let y of years" [value]="y.value">{{y.displayText}}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="col-md-4" *ngIf="monthlySearch">
                                     <select class="form-select form-control" name="month" id="month"
-                                        [(ngModel)]="month">
+                                        [(ngModel)]="month" (ngModelChange)="list()">
                                         <option *ngFor="let m of months" [value]="m.value">{{m.displayText}}
                                         </option>
                                     </select>
@@ -144,6 +153,8 @@
                                     <th>Client</th>
                                     <th>ServiceTypes</th>
                                     <th>Total</th>
+                                    <th>Discount</th>
+                                    <th>Net Total</th>
                                     <th>Paid</th>
                                     <th>Due</th>
                                     <th>Status</th>
@@ -170,6 +181,12 @@
                                     </td>
                                     <td>
                                         <span>{{record.serviceCharge | number: '1.2-2'}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{record.discount | number: '1.2-2'}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{record.netServiceCharge | number: '1.2-2'}}</span>
                                     </td>
                                     <td>
                                         <span>{{record.totalPaid | number: '1.2-2'}}</span>

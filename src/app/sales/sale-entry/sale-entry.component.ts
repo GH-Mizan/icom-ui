@@ -30,6 +30,7 @@ import { debounceTime, distinctUntilChanged, firstValueFrom, map, Observable } f
 export class SaleEntryComponent extends AppComponentBase implements OnInit {
     @Output() onSave = new EventEmitter<any>();
     model: SalesEntryDto;
+    invoiceDetails: SalesDetailsEntryDto[];
 
     products: ComboboxItemDto[];
     hasSerial: boolean;
@@ -75,6 +76,15 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
             this.loadProducts(),
             this.loadClients()
         ]);
+        if (this.model?.id) {
+            this.date = this.model.date.toDate();
+            this.selectedClient = {
+                displayText: this.clients.find(f => f.value == this.model.clientId.toString()).displayText,
+                isSelected: false,
+                value: this.model.clientId.toString()
+            }
+            this.calculateTotalValues();
+        }
         this.loading = false;
         this.cd.detectChanges();
     }
@@ -122,17 +132,12 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
     }
 
     async loadClients() {
-        this.clients = await firstValueFrom(this._clientService.getClientsSelectList());
+        this.clients = await firstValueFrom(this._clientService.getClientsSelectList(null));
         this.cd.detectChanges();
     }
 
     save() {
         this.saving = true;
-        //this.model.sales.date = moment(this.date);
-        //this.model.clientId = parseInt(this.selectedClient.value);
-        //this.model.productsJson = JSON.stringify(this.saleProducts);
-
-        
 
         const model = this.model;
         model.date = moment(this.date);
@@ -230,7 +235,7 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
 
         this.calculateTotalValues();
 
-        this.products = this.products.filter(f=> f.value !== this.productId);
+        this.products = this.products.filter(f => f.value !== this.productId);
 
         this.clear();
     }
@@ -245,10 +250,10 @@ export class SaleEntryComponent extends AppComponentBase implements OnInit {
     }
 
     onInvoicedChanged() {
-        this._salesService.prepareSaleFromInvoice(this.model.invoiceNumber).subscribe(res=> {
-            if(res.sales.invoiceNumber === "DUPLICATE")
+        this._salesService.prepareSaleFromInvoice(this.model.invoiceNumber).subscribe(res => {
+            if (res.sales.invoiceNumber === "DUPLICATE")
                 abp.message.info("This invoice number is already exists. Please Check.", "Duplicate");
-            
+
             this.date = res.sales.date.toDate();
             this.invoiceDate = this.date;
             this.selectedClient = {

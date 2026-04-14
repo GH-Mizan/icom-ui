@@ -77,6 +77,17 @@ export class InvoicesComponent extends PagedListingComponentBase<InvoiceOutputDt
       })
   }
 
+  delete(record: InvoiceOutputDto) {
+      abp.message.confirm(`You want to delete ${record.invoiceNumber} record`, 'Are you sure?', (Ok) => {
+        if (Ok) {
+          this._invoiceService.invoiceRemove(record.id).subscribe(() => {
+            abp.notify.success("Successfully Removed");
+            this.refresh();
+          })
+        }
+      })
+    }
+
   private showEntryDialog(input: InvoiceEntryInputDto): void {
       let entryDialog: BsModalRef;
       entryDialog = this._modalService.show(

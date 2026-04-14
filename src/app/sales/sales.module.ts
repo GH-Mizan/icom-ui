@@ -7,6 +7,7 @@ import { SharedModule } from '@shared/shared.module';
 import { SaleEntryComponent } from './sale-entry/sale-entry.component';
 import { DueReceivedHistoryComponent } from './due-received-histories/due-received-histories.component';
 import { DueReceivedEntryComponent } from './due-received-entry/due-received-entry.component';
+import { SalesDetailsComponent } from './details/sales-details.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { DueReceivedEntryComponent } from './due-received-entry/due-received-ent
     SalesComponent,
     SaleEntryComponent,
     DueReceivedHistoryComponent,
-    DueReceivedEntryComponent
+    DueReceivedEntryComponent,
+    SalesDetailsComponent
   ],
   imports: [
     SharedModule,

@@ -75,7 +75,7 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
          
             this.cd.detectChanges();
         }
-
+        
         this.loading = false;
         this.cd.detectChanges();
     }
@@ -89,7 +89,7 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
 
 
     async loadClients() {
-        this.clients = await firstValueFrom(this._clientService.getClientsSelectList());
+        this.clients = await firstValueFrom(this._clientService.getClientsSelectList(null));
         this.cd.detectChanges();
     }
 
@@ -133,7 +133,8 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
     }
 
     calculateDue() {
-        this.model.due = this.model.serviceCharge - this.model.totalPaid;
+        this.model.netServiceCharge = this.model.serviceCharge - this.model.discount;
+        this.model.due = this.model.netServiceCharge - this.model.totalPaid;
     }
 
 

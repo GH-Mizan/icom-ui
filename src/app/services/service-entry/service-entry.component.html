@@ -57,6 +57,24 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="discount">Discount</label>
+                    <div class="col-md-9">
+                        <input type="number" class="form-control" name="discount" id="discount" selectOnFocus
+                            [(ngModel)]="model.discount" (ngModelChange)="calculateDue()" #discountModel="ngModel" #discountEl />
+                        <abp-validation-summary [control]="discountModel" [controlEl]="discountEl"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="netServiceCharge">Net Service Charge</label>
+                    <div class="col-md-9">
+                        <input type="number" class="form-control" name="netServiceCharge" id="netServiceCharge" disabled
+                            [(ngModel)]="model.netServiceCharge" #nscModel="ngModel" #nscEl />
+                        <abp-validation-summary [control]="nscModel" [controlEl]="nscEl"></abp-validation-summary>
+                    </div>
+                </div>
+
                 <div class="form-group row required">
                     <label class="col-md-3 col-form-label" for="totalPaid">Total Paid</label>
                     <div class="col-md-9">

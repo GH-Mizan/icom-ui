@@ -65,31 +65,31 @@ export class BrandsComponent extends PagedListingComponentBase<BrandOutputDto> {
   }
 
   create() {
-      const brand = new BrandEntryDto();
-      this.showEntryDialog(brand);
-    }
-  
-    edit(id: number) {
-      this._brandsService.get(id).subscribe(res => {
-        this.showEntryDialog(res);
-      });
-    }
-  
-    private showEntryDialog(brand: BrandEntryDto): void {
-      let entryDialog: BsModalRef;
-      entryDialog = this._modalService.show(
-        BrandEntryComponent,
-        {
-          class: "modal-lg",
-          initialState: {
-            model: brand,
-          },
-        }
-      );
-      entryDialog.content.onSave.subscribe(() => {
-        this.refresh();
-      });
-    }
-  
+    const brand = new BrandEntryDto();
+    this.showEntryDialog(brand);
+  }
+
+  edit(id: number) {
+    this._brandsService.get(id).subscribe(res => {
+      this.showEntryDialog(res);
+    });
+  }
+
+  private showEntryDialog(brand: BrandEntryDto): void {
+    let entryDialog: BsModalRef;
+    entryDialog = this._modalService.show(
+      BrandEntryComponent,
+      {
+        class: "modal-lg",
+        initialState: {
+          model: brand,
+        },
+      }
+    );
+    entryDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
+  }
+
 
 }

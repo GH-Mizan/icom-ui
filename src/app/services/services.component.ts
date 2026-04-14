@@ -40,6 +40,10 @@ export class ServicesComponent extends PagedListingComponentBase<ServiceOutputDt
   lifeTimeDue: boolean = false;
   serviceTypes: ComboboxItemDto[];
   serviceType;
+  totalServiceCharge: number;
+  totalPaid: number;
+  totalDue: number;
+  overallDue: number;
 
 
   constructor(
@@ -53,7 +57,7 @@ export class ServicesComponent extends PagedListingComponentBase<ServiceOutputDt
   }
 
   ngOnInit(): void {
-    this._clientService.getClientsSelectList().subscribe(res => {
+    this._clientService.getClientsSelectList(null).subscribe(res => {
       this.clients = res;
       this.cd.detectChanges();
     });
@@ -101,8 +105,12 @@ export class ServicesComponent extends PagedListingComponentBase<ServiceOutputDt
       })
     )
       .subscribe((result) => {
-        this.primengTableHelper.records = result.items;
-        this.primengTableHelper.totalRecordsCount = result.totalCount;
+        this.primengTableHelper.records = result.services.items;
+        this.primengTableHelper.totalRecordsCount = result.services.totalCount;
+        this.totalServiceCharge = result.totalServices;
+        this.totalPaid = result.totalPaid;
+        this.totalDue = result.totalDue;
+        this.overallDue = result.overallDue;
         this.primengTableHelper.isLoading = false;
         this.cd.detectChanges();
       });

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } from "@angular/core";
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from "@shared/app-component-base";
-import { BtebSessionServiceProxy, ComboboxItemDto, StudentEntryInputDto, StudentServiceProxy } from "@shared/service-proxies/service-proxies";
+import { BtebSessionServiceProxy, ClientServiceProxy, ClientType, ClientTypeNullable, ComboboxItemDto, StudentEntryInputDto, StudentServiceProxy } from "@shared/service-proxies/service-proxies";
 import moment from "moment";
 import { firstValueFrom } from "rxjs";
 
@@ -28,6 +28,7 @@ export class StudentEntryComponent extends AppComponentBase implements OnInit {
     resultStatuses: ComboboxItemDto[];
     officePrograms: ComboboxItemDto[];
     btebSessions: ComboboxItemDto[];
+    clients: ComboboxItemDto[];
 
 
     constructor(
@@ -35,6 +36,7 @@ export class StudentEntryComponent extends AppComponentBase implements OnInit {
         public bsModalRef: BsModalRef,
         private readonly _sessionService: BtebSessionServiceProxy,
         private readonly _studentService: StudentServiceProxy,
+        private readonly _clientService: ClientServiceProxy,
         private cd: ChangeDetectorRef
     ) {
         super(injector);
@@ -55,8 +57,14 @@ export class StudentEntryComponent extends AppComponentBase implements OnInit {
             await this.loadCourseDurations(),
             await this.loadOfficePrograms(),
             await this.loadResultStatuses(),
-            await this.loadBtebSessions()
+            await this.loadBtebSessions(),
+            await this.loadClients()
         ])
+    }
+
+    async loadClients() {
+        this.clients = await firstValueFrom(this._clientService.getClientsSelectList(ClientTypeNullable._4));
+        this.cd.detectChanges();
     }
 
     async loadBloodGroups() {

@@ -1413,10 +1413,13 @@ export class ClientServiceProxy {
     }
 
     /**
+     * @param type (optional) 
      * @return OK
      */
-    getClientsSelectList(): Observable<ComboboxItemDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/Client/GetClientsSelectList";
+    getClientsSelectList(type: ClientTypeNullable | null | undefined): Observable<ComboboxItemDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Client/GetClientsSelectList?";
+        if (type !== undefined && type !== null)
+            url_ += "type=" + encodeURIComponent("" + type) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -3300,7 +3303,9 @@ export class SalesServiceProxy {
     }
 
     /**
+     * @param includeDateSearch (optional) 
      * @param clientId (optional) 
+     * @param categoryId (optional) 
      * @param dueOnly (optional) 
      * @param startDate (optional) 
      * @param endDate (optional) 
@@ -3314,12 +3319,20 @@ export class SalesServiceProxy {
      * @param take (optional) 
      * @return OK
      */
-    getPaginated(clientId: number | undefined, dueOnly: boolean | undefined, startDate: moment.Moment | undefined, endDate: moment.Moment | undefined, month: number | undefined, year: number | undefined, dateRangeSearch: boolean | undefined, monthlySearch: boolean | undefined, lifetimeDue: boolean | undefined, searchText: string | undefined, skip: number | undefined, take: number | undefined): Observable<SaleOutputDtoPagedResultDto> {
+    getPaginated(includeDateSearch: boolean | undefined, clientId: number | undefined, categoryId: number | undefined, dueOnly: boolean | undefined, startDate: moment.Moment | undefined, endDate: moment.Moment | undefined, month: number | undefined, year: number | undefined, dateRangeSearch: boolean | undefined, monthlySearch: boolean | undefined, lifetimeDue: boolean | undefined, searchText: string | undefined, skip: number | undefined, take: number | undefined): Observable<SalesPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/Sales/GetPaginated?";
+        if (includeDateSearch === null)
+            throw new Error("The parameter 'includeDateSearch' cannot be null.");
+        else if (includeDateSearch !== undefined)
+            url_ += "IncludeDateSearch=" + encodeURIComponent("" + includeDateSearch) + "&";
         if (clientId === null)
             throw new Error("The parameter 'clientId' cannot be null.");
         else if (clientId !== undefined)
             url_ += "ClientId=" + encodeURIComponent("" + clientId) + "&";
+        if (categoryId === null)
+            throw new Error("The parameter 'categoryId' cannot be null.");
+        else if (categoryId !== undefined)
+            url_ += "CategoryId=" + encodeURIComponent("" + categoryId) + "&";
         if (dueOnly === null)
             throw new Error("The parameter 'dueOnly' cannot be null.");
         else if (dueOnly !== undefined)
@@ -3381,14 +3394,14 @@ export class SalesServiceProxy {
                 try {
                     return this.processGetPaginated(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<SaleOutputDtoPagedResultDto>;
+                    return _observableThrow(e) as any as Observable<SalesPagedResultDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<SaleOutputDtoPagedResultDto>;
+                return _observableThrow(response_) as any as Observable<SalesPagedResultDto>;
         }));
     }
 
-    protected processGetPaginated(response: HttpResponseBase): Observable<SaleOutputDtoPagedResultDto> {
+    protected processGetPaginated(response: HttpResponseBase): Observable<SalesPagedResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -3399,7 +3412,88 @@ export class SalesServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = SaleOutputDtoPagedResultDto.fromJS(resultData200);
+            result200 = SalesPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param clientId (optional) 
+     * @param categoryId (optional) 
+     * @param productId (optional) 
+     * @param searchText (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @return OK
+     */
+    getPaginatedSalesDetails(clientId: number | undefined, categoryId: number | undefined, productId: number | undefined, searchText: string | undefined, skip: number | undefined, take: number | undefined): Observable<SalesDetailsOutputDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/Sales/GetPaginatedSalesDetails?";
+        if (clientId === null)
+            throw new Error("The parameter 'clientId' cannot be null.");
+        else if (clientId !== undefined)
+            url_ += "ClientId=" + encodeURIComponent("" + clientId) + "&";
+        if (categoryId === null)
+            throw new Error("The parameter 'categoryId' cannot be null.");
+        else if (categoryId !== undefined)
+            url_ += "CategoryId=" + encodeURIComponent("" + categoryId) + "&";
+        if (productId === null)
+            throw new Error("The parameter 'productId' cannot be null.");
+        else if (productId !== undefined)
+            url_ += "ProductId=" + encodeURIComponent("" + productId) + "&";
+        if (searchText === null)
+            throw new Error("The parameter 'searchText' cannot be null.");
+        else if (searchText !== undefined)
+            url_ += "SearchText=" + encodeURIComponent("" + searchText) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPaginatedSalesDetails(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPaginatedSalesDetails(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SalesDetailsOutputDtoPagedResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SalesDetailsOutputDtoPagedResultDto>;
+        }));
+    }
+
+    protected processGetPaginatedSalesDetails(response: HttpResponseBase): Observable<SalesDetailsOutputDtoPagedResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SalesDetailsOutputDtoPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -3638,7 +3732,7 @@ export class SalesServiceProxy {
      * @param id (optional) 
      * @return OK
      */
-    get(id: number | undefined): Observable<SaleEntryDto> {
+    get(id: number | undefined): Observable<SalesEntryInputDto> {
         let url_ = this.baseUrl + "/api/services/app/Sales/Get?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -3661,14 +3755,14 @@ export class SalesServiceProxy {
                 try {
                     return this.processGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<SaleEntryDto>;
+                    return _observableThrow(e) as any as Observable<SalesEntryInputDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<SaleEntryDto>;
+                return _observableThrow(response_) as any as Observable<SalesEntryInputDto>;
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<SaleEntryDto> {
+    protected processGet(response: HttpResponseBase): Observable<SalesEntryInputDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -3679,7 +3773,7 @@ export class SalesServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = SaleEntryDto.fromJS(resultData200);
+            result200 = SalesEntryInputDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -3745,6 +3839,58 @@ export class SalesServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param saleId (optional) 
+     * @return OK
+     */
+    salesRemove(saleId: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Sales/SalesRemove?";
+        if (saleId === null)
+            throw new Error("The parameter 'saleId' cannot be null.");
+        else if (saleId !== undefined)
+            url_ += "saleId=" + encodeURIComponent("" + saleId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSalesRemove(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSalesRemove(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processSalesRemove(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable()
@@ -3774,7 +3920,7 @@ export class ServiceServiceProxy {
      * @param take (optional) 
      * @return OK
      */
-    getPaginatedServices(clientId: number | undefined, dueOnly: boolean | undefined, startDate: moment.Moment | undefined, endDate: moment.Moment | undefined, month: number | undefined, year: number | undefined, dateRangeSearch: boolean | undefined, monthlySearch: boolean | undefined, lifetimeDue: boolean | undefined, serviceType: string | undefined, searchText: string | undefined, skip: number | undefined, take: number | undefined): Observable<ServiceOutputDtoPagedResultDto> {
+    getPaginatedServices(clientId: number | undefined, dueOnly: boolean | undefined, startDate: moment.Moment | undefined, endDate: moment.Moment | undefined, month: number | undefined, year: number | undefined, dateRangeSearch: boolean | undefined, monthlySearch: boolean | undefined, lifetimeDue: boolean | undefined, serviceType: string | undefined, searchText: string | undefined, skip: number | undefined, take: number | undefined): Observable<ServicesPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/Service/GetPaginatedServices?";
         if (clientId === null)
             throw new Error("The parameter 'clientId' cannot be null.");
@@ -3845,14 +3991,14 @@ export class ServiceServiceProxy {
                 try {
                     return this.processGetPaginatedServices(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ServiceOutputDtoPagedResultDto>;
+                    return _observableThrow(e) as any as Observable<ServicesPagedResultDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ServiceOutputDtoPagedResultDto>;
+                return _observableThrow(response_) as any as Observable<ServicesPagedResultDto>;
         }));
     }
 
-    protected processGetPaginatedServices(response: HttpResponseBase): Observable<ServiceOutputDtoPagedResultDto> {
+    protected processGetPaginatedServices(response: HttpResponseBase): Observable<ServicesPagedResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -3863,7 +4009,7 @@ export class ServiceServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ServiceOutputDtoPagedResultDto.fromJS(resultData200);
+            result200 = ServicesPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -8082,6 +8228,13 @@ export enum ClientType {
     _4 = 4,
 }
 
+export enum ClientTypeNullable {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+}
+
 export class ComboboxItemDto implements IComboboxItemDto {
     value: string | undefined;
     displayText: string | undefined;
@@ -10536,77 +10689,6 @@ export interface IRoleListDtoListResultDto {
     items: RoleListDto[] | undefined;
 }
 
-export class SaleEntryDto implements ISaleEntryDto {
-    id: number | undefined;
-    date: moment.Moment;
-    clientId: number;
-    hasDue: boolean;
-    overallDiscount: number;
-    tenantId: number;
-    reference: string | undefined;
-    productsJson: string | undefined;
-
-    constructor(data?: ISaleEntryDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.date = _data["date"] ? moment(_data["date"].toString()) : <any>undefined;
-            this.clientId = _data["clientId"];
-            this.hasDue = _data["hasDue"];
-            this.overallDiscount = _data["overallDiscount"];
-            this.tenantId = _data["tenantId"];
-            this.reference = _data["reference"];
-            this.productsJson = _data["productsJson"];
-        }
-    }
-
-    static fromJS(data: any): SaleEntryDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new SaleEntryDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["clientId"] = this.clientId;
-        data["hasDue"] = this.hasDue;
-        data["overallDiscount"] = this.overallDiscount;
-        data["tenantId"] = this.tenantId;
-        data["reference"] = this.reference;
-        data["productsJson"] = this.productsJson;
-        return data;
-    }
-
-    clone(): SaleEntryDto {
-        const json = this.toJSON();
-        let result = new SaleEntryDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ISaleEntryDto {
-    id: number | undefined;
-    date: moment.Moment;
-    clientId: number;
-    hasDue: boolean;
-    overallDiscount: number;
-    tenantId: number;
-    reference: string | undefined;
-    productsJson: string | undefined;
-}
-
 export class SaleOutputDto implements ISaleOutputDto {
     id: number;
     date: moment.Moment;
@@ -10828,6 +10910,152 @@ export interface ISalesDetailsEntryDto {
     remarks: string | undefined;
 }
 
+export class SalesDetailsOutputDto implements ISalesDetailsOutputDto {
+    id: number | undefined;
+    salesId: number;
+    date: moment.Moment;
+    clientName: string | undefined;
+    productId: number;
+    productName: string | undefined;
+    categoryId: number;
+    categoryName: string | undefined;
+    serialNo: string | undefined;
+    unitPrice: number;
+    quantity: number;
+    totalPrice: number;
+    remarks: string | undefined;
+
+    constructor(data?: ISalesDetailsOutputDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.salesId = _data["salesId"];
+            this.date = _data["date"] ? moment(_data["date"].toString()) : <any>undefined;
+            this.clientName = _data["clientName"];
+            this.productId = _data["productId"];
+            this.productName = _data["productName"];
+            this.categoryId = _data["categoryId"];
+            this.categoryName = _data["categoryName"];
+            this.serialNo = _data["serialNo"];
+            this.unitPrice = _data["unitPrice"];
+            this.quantity = _data["quantity"];
+            this.totalPrice = _data["totalPrice"];
+            this.remarks = _data["remarks"];
+        }
+    }
+
+    static fromJS(data: any): SalesDetailsOutputDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SalesDetailsOutputDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["salesId"] = this.salesId;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["clientName"] = this.clientName;
+        data["productId"] = this.productId;
+        data["productName"] = this.productName;
+        data["categoryId"] = this.categoryId;
+        data["categoryName"] = this.categoryName;
+        data["serialNo"] = this.serialNo;
+        data["unitPrice"] = this.unitPrice;
+        data["quantity"] = this.quantity;
+        data["totalPrice"] = this.totalPrice;
+        data["remarks"] = this.remarks;
+        return data;
+    }
+
+    clone(): SalesDetailsOutputDto {
+        const json = this.toJSON();
+        let result = new SalesDetailsOutputDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISalesDetailsOutputDto {
+    id: number | undefined;
+    salesId: number;
+    date: moment.Moment;
+    clientName: string | undefined;
+    productId: number;
+    productName: string | undefined;
+    categoryId: number;
+    categoryName: string | undefined;
+    serialNo: string | undefined;
+    unitPrice: number;
+    quantity: number;
+    totalPrice: number;
+    remarks: string | undefined;
+}
+
+export class SalesDetailsOutputDtoPagedResultDto implements ISalesDetailsOutputDtoPagedResultDto {
+    items: SalesDetailsOutputDto[] | undefined;
+    totalCount: number;
+
+    constructor(data?: ISalesDetailsOutputDtoPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(SalesDetailsOutputDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): SalesDetailsOutputDtoPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SalesDetailsOutputDtoPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+
+    clone(): SalesDetailsOutputDtoPagedResultDto {
+        const json = this.toJSON();
+        let result = new SalesDetailsOutputDtoPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISalesDetailsOutputDtoPagedResultDto {
+    items: SalesDetailsOutputDto[] | undefined;
+    totalCount: number;
+}
+
 export class SalesEntryDto implements ISalesEntryDto {
     id: number | undefined;
     date: moment.Moment;
@@ -10972,6 +11200,65 @@ export interface ISalesEntryInputDto {
     sales: SalesEntryDto;
     salesDetails: SalesDetailsEntryDto[] | undefined;
     dueReceived: DueReceivedHistoryDto;
+}
+
+export class SalesPagedResultDto implements ISalesPagedResultDto {
+    sales: SaleOutputDtoPagedResultDto;
+    totalNetSales: number;
+    totalPaid: number;
+    totalDue: number;
+    overallDue: number;
+
+    constructor(data?: ISalesPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.sales = _data["sales"] ? SaleOutputDtoPagedResultDto.fromJS(_data["sales"]) : <any>undefined;
+            this.totalNetSales = _data["totalNetSales"];
+            this.totalPaid = _data["totalPaid"];
+            this.totalDue = _data["totalDue"];
+            this.overallDue = _data["overallDue"];
+        }
+    }
+
+    static fromJS(data: any): SalesPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SalesPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["sales"] = this.sales ? this.sales.toJSON() : <any>undefined;
+        data["totalNetSales"] = this.totalNetSales;
+        data["totalPaid"] = this.totalPaid;
+        data["totalDue"] = this.totalDue;
+        data["overallDue"] = this.overallDue;
+        return data;
+    }
+
+    clone(): SalesPagedResultDto {
+        const json = this.toJSON();
+        let result = new SalesPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISalesPagedResultDto {
+    sales: SaleOutputDtoPagedResultDto;
+    totalNetSales: number;
+    totalPaid: number;
+    totalDue: number;
+    overallDue: number;
 }
 
 export class ServiceDueReceivedEntryDto implements IServiceDueReceivedEntryDto {
@@ -11126,6 +11413,8 @@ export class ServiceEntryDto implements IServiceEntryDto {
     invoiceNumber: string | undefined;
     serviceTypes: string | undefined;
     serviceCharge: number;
+    discount: number;
+    netServiceCharge: number;
     totalPaid: number;
     due: number;
     paymentStatus: PaymentStatus;
@@ -11149,6 +11438,8 @@ export class ServiceEntryDto implements IServiceEntryDto {
             this.invoiceNumber = _data["invoiceNumber"];
             this.serviceTypes = _data["serviceTypes"];
             this.serviceCharge = _data["serviceCharge"];
+            this.discount = _data["discount"];
+            this.netServiceCharge = _data["netServiceCharge"];
             this.totalPaid = _data["totalPaid"];
             this.due = _data["due"];
             this.paymentStatus = _data["paymentStatus"];
@@ -11172,6 +11463,8 @@ export class ServiceEntryDto implements IServiceEntryDto {
         data["invoiceNumber"] = this.invoiceNumber;
         data["serviceTypes"] = this.serviceTypes;
         data["serviceCharge"] = this.serviceCharge;
+        data["discount"] = this.discount;
+        data["netServiceCharge"] = this.netServiceCharge;
         data["totalPaid"] = this.totalPaid;
         data["due"] = this.due;
         data["paymentStatus"] = this.paymentStatus;
@@ -11195,6 +11488,8 @@ export interface IServiceEntryDto {
     invoiceNumber: string | undefined;
     serviceTypes: string | undefined;
     serviceCharge: number;
+    discount: number;
+    netServiceCharge: number;
     totalPaid: number;
     due: number;
     paymentStatus: PaymentStatus;
@@ -11442,6 +11737,7 @@ export enum ServiceExpenseType {
     _4 = 4,
     _5 = 5,
     _6 = 6,
+    _7 = 7,
 }
 
 export class ServiceOutputDto implements IServiceOutputDto {
@@ -11451,6 +11747,8 @@ export class ServiceOutputDto implements IServiceOutputDto {
     serviceTypes: string | undefined;
     serviceTypeNames: string | undefined;
     serviceCharge: number;
+    discount: number;
+    netServiceCharge: number;
     totalPaid: number;
     due: number;
     paymentStatus: PaymentStatus;
@@ -11478,6 +11776,8 @@ export class ServiceOutputDto implements IServiceOutputDto {
             this.serviceTypes = _data["serviceTypes"];
             this.serviceTypeNames = _data["serviceTypeNames"];
             this.serviceCharge = _data["serviceCharge"];
+            this.discount = _data["discount"];
+            this.netServiceCharge = _data["netServiceCharge"];
             this.totalPaid = _data["totalPaid"];
             this.due = _data["due"];
             this.paymentStatus = _data["paymentStatus"];
@@ -11505,6 +11805,8 @@ export class ServiceOutputDto implements IServiceOutputDto {
         data["serviceTypes"] = this.serviceTypes;
         data["serviceTypeNames"] = this.serviceTypeNames;
         data["serviceCharge"] = this.serviceCharge;
+        data["discount"] = this.discount;
+        data["netServiceCharge"] = this.netServiceCharge;
         data["totalPaid"] = this.totalPaid;
         data["due"] = this.due;
         data["paymentStatus"] = this.paymentStatus;
@@ -11532,6 +11834,8 @@ export interface IServiceOutputDto {
     serviceTypes: string | undefined;
     serviceTypeNames: string | undefined;
     serviceCharge: number;
+    discount: number;
+    netServiceCharge: number;
     totalPaid: number;
     due: number;
     paymentStatus: PaymentStatus;
@@ -11604,6 +11908,65 @@ export enum ServiceType {
     _3 = 3,
     _4 = 4,
     _5 = 5,
+}
+
+export class ServicesPagedResultDto implements IServicesPagedResultDto {
+    services: ServiceOutputDtoPagedResultDto;
+    totalServices: number;
+    totalPaid: number;
+    totalDue: number;
+    overallDue: number;
+
+    constructor(data?: IServicesPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.services = _data["services"] ? ServiceOutputDtoPagedResultDto.fromJS(_data["services"]) : <any>undefined;
+            this.totalServices = _data["totalServices"];
+            this.totalPaid = _data["totalPaid"];
+            this.totalDue = _data["totalDue"];
+            this.overallDue = _data["overallDue"];
+        }
+    }
+
+    static fromJS(data: any): ServicesPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ServicesPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["services"] = this.services ? this.services.toJSON() : <any>undefined;
+        data["totalServices"] = this.totalServices;
+        data["totalPaid"] = this.totalPaid;
+        data["totalDue"] = this.totalDue;
+        data["overallDue"] = this.overallDue;
+        return data;
+    }
+
+    clone(): ServicesPagedResultDto {
+        const json = this.toJSON();
+        let result = new ServicesPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IServicesPagedResultDto {
+    services: ServiceOutputDtoPagedResultDto;
+    totalServices: number;
+    totalPaid: number;
+    totalDue: number;
+    overallDue: number;
 }
 
 export class SetupExpenseEntryDto implements ISetupExpenseEntryDto {
@@ -11824,6 +12187,7 @@ export class StudentEntryInputDto implements IStudentEntryInputDto {
     isActive: boolean;
     courseCompleted: boolean;
     certificateDistributed: boolean;
+    isClientExists: boolean;
     tenantId: number;
 
     constructor(data?: IStudentEntryInputDto) {
@@ -11873,6 +12237,7 @@ export class StudentEntryInputDto implements IStudentEntryInputDto {
             this.isActive = _data["isActive"];
             this.courseCompleted = _data["courseCompleted"];
             this.certificateDistributed = _data["certificateDistributed"];
+            this.isClientExists = _data["isClientExists"];
             this.tenantId = _data["tenantId"];
         }
     }
@@ -11922,6 +12287,7 @@ export class StudentEntryInputDto implements IStudentEntryInputDto {
         data["isActive"] = this.isActive;
         data["courseCompleted"] = this.courseCompleted;
         data["certificateDistributed"] = this.certificateDistributed;
+        data["isClientExists"] = this.isClientExists;
         data["tenantId"] = this.tenantId;
         return data;
     }
@@ -11971,6 +12337,7 @@ export interface IStudentEntryInputDto {
     isActive: boolean;
     courseCompleted: boolean;
     certificateDistributed: boolean;
+    isClientExists: boolean;
     tenantId: number;
 }
 
