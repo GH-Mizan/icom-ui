@@ -58,8 +58,14 @@ import { AppComponent } from './app.component';
                     { path: 'assets', loadChildren: () => import('./assets/assets.module').then(m => m.AssetsModule) },
                     { path: 'service-expences', loadChildren: () => import('./service-expenses/service-expenses.module').then(m => m.ServiceExpensesModule) },
                     { path: 'setup-expences', loadChildren: () => import('./setup-expenses/setup-expenses.module').then(m => m.SetupExpensesModule) },
+                    { path: 'attendances', loadChildren: () => import('./attendances/attendances.module').then(m => m.AttendanesModule) },
+                    { path: 'class-sheets', loadChildren: () => import('./class-sheets/class-sheets.module').then(m => m.ClassSheetsModule) },
+                    { path: 'collections', loadChildren: () => import('./collections/collections.module').then(m => m.CollectionsModule) },
                 ],
             },
+           
+            
+
             
             
             

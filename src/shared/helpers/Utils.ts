@@ -75,7 +75,7 @@ export class Utils {
                             height: 60,
                             alignment: 'center'
                         },
-                        { text: 'Institute of Computer Communication', bold: true, font: 'LucidaGrande', fontSize: 18, marginTop: 5 },
+                        { text: 'Institute of Computer Communication', bold: true, font: 'LucidaGrande', fontSize: 18, marginTop: 7 },
                     ],
                     [{ text: '' }, { text: 'Hazi Emdad Mention, Mograpara, Chowrasta', fontSize: 10 }],
                     [{ text: '' }, { text: 'Contact: 01947191516, 01840925187    E-mail: webdeveloper.mizan@gmail.com', fontSize: 10 }]

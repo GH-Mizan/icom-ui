@@ -31,6 +31,7 @@ export class StudentsComponent extends PagedListingComponentBase<StudentOutputDt
   courseId: number = null;
   btebSessions: ComboboxItemDto[] = [];
   courses: ComboboxItemDto[] = [];
+  isActive?: string = undefined;
 
   constructor(
     injector: Injector,
@@ -73,6 +74,7 @@ export class StudentsComponent extends PagedListingComponentBase<StudentOutputDt
     const certificateDistributed = this.certificateDistributed?.toString() == "true" ? true : this.certificateDistributed?.toString() == "false" ? false : undefined;
     const sessionId = (this.btebSessionId == null || this.btebSessionId.toString() == "null") ? undefined : this.btebSessionId;
     const courseId = (this.courseId == null || this.courseId.toString() == "null") ? undefined : this.courseId;
+     const isActive = this.isActive?.toString() == "true" ? true : this.isActive?.toString() == "false" ? false : undefined;
 
     this._studentService.getPaginatedStudents(
       isBteb,
@@ -82,6 +84,7 @@ export class StudentsComponent extends PagedListingComponentBase<StudentOutputDt
       certificateDistributed,
       sessionId,
       courseId,
+      isActive,
       this.searchText,
       this.primengTableHelper.getSkipCount(this.paginator, event),
       this.primengTableHelper.getMaxResultCount(this.paginator, event)
@@ -114,6 +117,7 @@ export class StudentsComponent extends PagedListingComponentBase<StudentOutputDt
 
   create() {
     const student = new StudentEntryInputDto();
+    student.isActive = true; 
     this.showentryDialog(student);
   }
 

@@ -43,6 +43,7 @@ export class DueReceivedEntryComponent extends AppComponentBase implements OnIni
     discountEditMode: boolean = false;
     paidEditMode: boolean = false;
     invalid: boolean = false;
+    currentDue: number;
 
     constructor(
         injector: Injector,
@@ -55,6 +56,7 @@ export class DueReceivedEntryComponent extends AppComponentBase implements OnIni
 
     ngOnInit(): void {
         this.invoiceDate = (this.dueReceived.invoiceDate).toDate();
+        this.currentDue = this.dueReceived.due;
         this.cd.detectChanges();
     }
 
@@ -85,7 +87,8 @@ export class DueReceivedEntryComponent extends AppComponentBase implements OnIni
             abp.message.info("Paid amount can't be greater than the net total", "Invalid Paid!");
             dueReceived.totalPaid = 0;
         } else {
-            this.dueReceived.due = this.dueReceived.netTotal - this.dueReceived.prevTotalPaid - this.dueReceived.totalPaid;
+            //this.dueReceived.due = dueReceived.netTotal - dueReceived.discount - dueReceived.prevTotalPaid - dueReceived.totalPaid;
+            this.dueReceived.due = this.currentDue - this.dueReceived.totalPaid;
             this.paidEditMode = false;
         }
 

@@ -107,7 +107,7 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
         model.date = moment(this.date);
         model.clientId = parseInt(this.selectedClient.value);
         model.serviceTypes = this.selectedServiceTypes.map(item => item.value).join(', ');
-        model.paymentStatus = model.due == 0 ? PaymentStatus._1 : model.serviceCharge == model.due ? PaymentStatus._3 : PaymentStatus._2
+        model.paymentStatus = model.due == 0 ? PaymentStatus._1 : model.netServiceCharge == model.due ? PaymentStatus._3 : PaymentStatus._2
 
         const input = {
             service: model
@@ -116,7 +116,7 @@ export class ServiceEntryComponent extends AppComponentBase implements OnInit {
         input.dueReceived = {
             serviceId: model.id,
             clientId: model.clientId,
-            paymentStatus: model.due == 0 ? PaymentStatus._1 : model.serviceCharge == model.due ? PaymentStatus._3 : PaymentStatus._2,
+            paymentStatus: model.due == 0 ? PaymentStatus._1 : model.netServiceCharge == model.due ? PaymentStatus._3 : PaymentStatus._2,
             grandTotal: model.serviceCharge,
             totalPaid: model.totalPaid,
             due: model.due,

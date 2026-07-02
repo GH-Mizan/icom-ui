@@ -30,6 +30,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
     productObj: any;
     serialNumber: string;
     warrantyPeriod: string;
+    customWarrantyText: string;
     quantity: number;
     unitPrice: number;
     totalAmount: number;
@@ -169,6 +170,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
         if (this.productInfo.category === "Stamp Seal") {
             this.isSeal = true;
             this.warrantyPeriod = "";
+            this.customWarrantyText = "";
             this.serialNumber = "";
         } else {
             this.isSeal = false;
@@ -196,6 +198,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
             };
             await this.onProductChanged();
             this.warrantyPeriod = record.warrantyPeriod;
+            this.customWarrantyText = record.customWarrantyText;
             this.serialNumber = record.serialNumber;
         } else {
             this.serviceType = record.serviceType.toString();
@@ -217,6 +220,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
             detail.serialNumber = this.serialNumber;
             detail.sealText = this.sealText;
             detail.warrantyPeriod = this.warrantyPeriod;
+            detail.customWarrantyText = this.customWarrantyText;
         } else {
             const serviceTypeObject = this.convertServiceTypeToEnum();
             detail.serviceType = serviceTypeObject.type;
@@ -248,7 +252,8 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                 brand: this.productInfo.brand,
                 serialNumber: this.serialNumber,
                 sealText: this.sealText,
-                warrantyPeriod: this.warrantyPeriod,
+                warrantyPeriod:  this.customWarrantyText ? this.customWarrantyText :this.warrantyPeriod,
+                customWarrantyText: this.customWarrantyText,
                 unitPrice: this.unitPrice,
                 quantity: this.quantity,
                 totalAmount: this.totalAmount,
@@ -315,6 +320,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
         this.serialNumber = "";
         this.sealText = "";
         this.warrantyPeriod = "";
+        this.customWarrantyText = "";
         this.quantity = 0;
         this.unitPrice = 0;
         this.totalAmount = 0;
@@ -337,6 +343,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                 serialNumber: x.serialNumber,
                 sealText: x.sealText,
                 warrantyPeriod: x.warrantyPeriod,
+                customWarrantyText: x.customWarrantyText,
                 serviceType: x.serviceType,
                 unitPrice: x.unitPrice,
                 quantity: x.quantity,
@@ -641,7 +648,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                     [
                         { text: productText, fontSize: 10 },
                         { text: item.serialNumber, style: ['cell_style'] },
-                        { text: item.warrantyPeriod, style: ['cell_style'] },
+                        { text: item.customWarrantyText ? item.customWarrantyText : item.warrantyPeriod, style: ['cell_style'] },
                         { text: item.quantity, style: ['cell_style'] },
                         { text: `${Utils.thousandsSeparator(item.unitPrice)}`, style: ['cell_style'] },
                         { text: `${Utils.thousandsSeparator(item.totalAmount)}`, style: ['cellAmount'] }

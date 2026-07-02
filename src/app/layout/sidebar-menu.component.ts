@@ -51,13 +51,20 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
                 new MenuItem('Sales Details', '/app/sales/details', 'far fa-circle')
             ]),
             new MenuItem('Services', '/app/services', 'fas fa-home'),
+            new MenuItem('Collections', '/app/collections', 'fas fa-home'),
             new MenuItem('Clients', '/app/clients', 'fas fa-home'),
             new MenuItem('Inventories', '/app/inventories', 'fas fa-home'),
             new MenuItem('Service Expenses', '/app/service-expences', 'far fa-circle'),
             new MenuItem('Students', '/app/students', 'fas fa-home'),
+            new MenuItem('Attendances', '/app/attendances', 'fas fa-home'),
             new MenuItem(this.l('Roles'), '/app/roles', 'fas fa-theater-masks', 'Pages.Roles'),
             new MenuItem(this.l('Tenants'), '/app/tenants', 'fas fa-building', 'Pages.Tenants'),
             new MenuItem(this.l('Users'), '/app/users', 'fas fa-users', 'Pages.Users'),
+            new MenuItem('Class Sheets', '', 'fas fa-circle', '', [
+                new MenuItem('Distribution', '/app/class-sheets/distributions', 'far fa-circle'),
+                new MenuItem('Inventory', '/app/class-sheets/inventories', 'far fa-circle'),
+                
+            ]),
             new MenuItem('Settings', '', 'fas fa-circle', '', [
                 new MenuItem('Brands', '/app/brands', 'far fa-circle'),
                 new MenuItem('Categories', '/app/categories', 'far fa-circle'),

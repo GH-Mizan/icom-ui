@@ -111,7 +111,22 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-12">
-                            <button type="button" class="btn btn-default" (click)="clearFilters()">Clear</button>
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label"> Active </label>
+                                <div class="col-md-4">
+                                    <select class="form-select form-control" [(ngModel)]="isActive"
+                                        (ngModelChange)="list()">
+                                        <option [value]="null">All</option>
+                                        <option [value]="true">Yes</option>
+                                        <option [value]="false">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                        <button type="button" class="btn btn-default" (click)="clearFilters()">Clear</button>
+                                </div>
+                                
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -124,6 +139,10 @@
                             [tableStyle]="{ 'min-width': '50rem' }">
                             <ng-template pTemplate="header">
                                 <tr>
+                                    <th class="text-center">
+                                        {{ "Actions" }}
+                                    </th>
+                                    <th> Id </th>
                                     <th> Name </th>
                                     <th> Contact </th>
                                     <th> Class Roll</th>
@@ -151,14 +170,19 @@
                                     <th>CourseCompleted</th>
                                     <th>CertificateDistributed</th>
                                     <th> Remarks</th>
-                                    <th class="text-center">
-                                        {{ "Actions" }}
-                                    </th>
                                 </tr>
                             </ng-template>
 
                             <ng-template pTemplate="body" let-record="$implicit">
                                 <tr>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <span>{{ record.identityNumber }}</span>
+                                    </td>
                                     <td>
                                         <span>{{ record.name }}</span>
                                     </td>
@@ -248,11 +272,6 @@
                                     </td>
                                     <td>
                                         <span>{{ record.remarks }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-sm bg-secondary" (click)="edit(record.id)">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             </ng-template>
