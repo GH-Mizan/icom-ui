@@ -116,17 +116,18 @@
                                 <div class="col-md-4">
                                     <select class="form-select form-control" [(ngModel)]="isActive"
                                         (ngModelChange)="list()">
-                                        <option [value]="null">All</option>
+                                        <option [value]="undefined">All</option>
                                         <option [value]="true">Yes</option>
                                         <option [value]="false">No</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                        <button type="button" class="btn btn-default" (click)="clearFilters()">Clear</button>
+                                    <button type="button" class="btn btn-default"
+                                        (click)="clearFilters()">Clear</button>
                                 </div>
-                                
+
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -144,31 +145,31 @@
                                     </th>
                                     <th> Id </th>
                                     <th> Name </th>
+                                    <th> Admision Date</th>
                                     <th> Contact </th>
-                                    <th> Class Roll</th>
+                                    <th pTooltip="Class Roll">C.R.</th>
                                     <th> Bteb </th>
-                                    <th> BtebAdmitted</th>
-                                    <th> BtebRegistered</th>
+                                    <th> BtebSession</th>
+                                    <th pTooltip="Bteb Admitted"> B.A.</th>
+                                    <th pTooltip="Bteb Registered"> B.R.</th>
                                     <th> RunningProgram</th>
                                     <th> Course</th>
                                     <th> Duration</th>
-                                    <th> BtebSession</th>
-                                    <th> RegistrationNumber</th>
+                                    <th pTooltip="RegistrationNumber">R.N.</th>
                                     <th> DidExam</th>
                                     <th> ResultStatus</th>
                                     <th> Result</th>
-                                    <th> SessionChanged</th>
+                                    <th pTooltip="Session Changed"> S.C.</th>
                                     <th> CourseFee </th>
-                                    <th> AdmisionDate</th>
                                     <th> FathersName</th>
                                     <th> MothersName</th>
                                     <th> DateOfBirth</th>
-                                    <th> BloodGroup</th>
+                                    <th pTooltip="Blood Group">B.G.</th>
                                     <th> Email</th>
                                     <th> PermanentAddress</th>
                                     <th> PresentAddress</th>
-                                    <th>CourseCompleted</th>
-                                    <th>CertificateDistributed</th>
+                                    <th pTooltip="Course Completed">C.C.</th>
+                                    <th pTooltip="CertificateDistributed">C.D.</th>
                                     <th> Remarks</th>
                                 </tr>
                             </ng-template>
@@ -184,16 +185,22 @@
                                         <span>{{ record.identityNumber }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.name }}</span>
+                                        <span class="no-wrap">{{ record.name }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.contactNumber }}</span>
+                                        <span class="no-wrap">{{ record.admisionDate | date: 'dd-MMM-yyyy' }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="no-wrap">{{ record.contactNumber }}</span>
                                     </td>
                                     <td>
                                         <span>{{ record.classRoll }}</span>
                                     </td>
                                     <td class="text-center">
                                         <span> <input type="checkbox" value="" [checked]="record.bteb" disabled> </span>
+                                    </td>
+                                    <td>
+                                        <span class="no-wrap">{{ record.btebSessionText }}</span>
                                     </td>
                                     <td class="text-center">
                                         <span> <input type="checkbox" value="" [checked]="record.btebAdmitted" disabled>
@@ -205,16 +212,13 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span>{{ record.runningProgramText }}</span>
+                                        <span class="no-wrap">{{ record.runningProgramText }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.courseName }}</span>
+                                        <span class="no-wrap">{{ record.courseName }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.durationText }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.btebSessionText }}</span>
+                                        <span class="no-wrap">{{ record.durationText }}</span>
                                     </td>
                                     <td>
                                         <span>{{ record.btebRegistrationNumber }}</span>
@@ -238,13 +242,10 @@
                                         <span>{{ record.courseFee }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.admisionDate | date: 'dd-MMM-yyyy' }}</span>
+                                        <span class="no-wrap">{{ record.fathersName }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ record.fathersName }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ record.mothersName }}</span>
+                                        <span class="no-wrap">{{ record.mothersName }}</span>
                                     </td>
                                     <td>
                                         <span>{{ record.dateOfBirth | date: 'dd-MMM-yyyy' }}</span>
@@ -255,11 +256,11 @@
                                     <td>
                                         <span>{{ record.email }}</span>
                                     </td>
-                                    <td>
-                                        <span>{{ record.permanentAddress }}</span>
+                                    <td class="truncated-cell" [pTooltip]="record.permanentAddress">
+                                        {{ record.permanentAddress }}
                                     </td>
-                                    <td>
-                                        <span>{{ record.presentAddress }}</span>
+                                    <td class="truncated-cell" [pTooltip]="record.presentAddress">
+                                        {{ record.presentAddress }}
                                     </td>
                                     <td class="text-center">
                                         <span> <input type="checkbox" value="" [checked]="record.courseCompleted"
@@ -270,8 +271,8 @@
                                         <span> <input type="checkbox" value="" [checked]="record.certificateDistributed"
                                                 disabled> </span>
                                     </td>
-                                    <td>
-                                        <span>{{ record.remarks }}</span>
+                                    <td class="truncated-cell" [pTooltip]="record.remarks">
+                                       {{ record.remarks }}
                                     </td>
                                 </tr>
                             </ng-template>

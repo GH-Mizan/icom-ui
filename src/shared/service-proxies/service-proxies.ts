@@ -10389,7 +10389,7 @@ export class InvoiceDetailsEntryDto implements IInvoiceDetailsEntryDto {
     sealText: string | undefined;
     category: string | undefined;
     brand: string | undefined;
-    serviceType: ServiceType;
+    serviceType: ServiceTypeNullable | undefined;
     serviceTypeText: string | undefined;
     warrantyPeriod: string | undefined;
     customWarrantyText: string | undefined;
@@ -10473,7 +10473,7 @@ export interface IInvoiceDetailsEntryDto {
     sealText: string | undefined;
     category: string | undefined;
     brand: string | undefined;
-    serviceType: ServiceType;
+    serviceType: ServiceTypeNullable | undefined;
     serviceTypeText: string | undefined;
     warrantyPeriod: string | undefined;
     customWarrantyText: string | undefined;
@@ -13191,6 +13191,7 @@ export enum ServiceExpenseType {
     _12 = 12,
     _13 = 13,
     _14 = 14,
+    _15 = 15,
 }
 
 export class ServiceOutputDto implements IServiceOutputDto {
@@ -13355,7 +13356,7 @@ export interface IServiceOutputDtoPagedResultDto {
     totalCount: number;
 }
 
-export enum ServiceType {
+export enum ServiceTypeNullable {
     _1 = 1,
     _2 = 2,
     _3 = 3,

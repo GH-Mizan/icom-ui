@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } from "@angular/core";
 import { BsModalRef } from "ngx-bootstrap/modal";
-import { ClientServiceProxy, ComboboxItemDto, InvoiceDetailsEntryDto, InvoicedProductInfoDto, InvoiceEntryDto, InvoiceEntryInputDto, InvoiceServiceProxy, InvoiceType, PricelistServiceProxy, ServiceServiceProxy, ServiceType } from "@shared/service-proxies/service-proxies";
+import { ClientServiceProxy, ComboboxItemDto, InvoiceDetailsEntryDto, InvoicedProductInfoDto, InvoiceEntryDto, InvoiceEntryInputDto, InvoiceServiceProxy, InvoiceType, PricelistServiceProxy, ServiceServiceProxy } from "@shared/service-proxies/service-proxies";
 import { AppComponentBase } from "@shared/app-component-base";
 import { firstValueFrom } from "rxjs";
 import moment from "moment";
@@ -41,15 +41,16 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
     saving = false;
     loading = true;
     editMode = false;
-    selectedUid: string;
+    selectedUid: string = "";
     isSeal = false;
     pdfMake: any;
-    sealText: string;
+    sealText: string = "";
     productInvoice = true;
 
-    serviceTypes: ComboboxItemDto[];
+    serviceTypes: ComboboxItemDto[] = [];
     serviceType: string = "";
     blankRows: number = 17;
+    serviceTypeText: string = "";
 
 
     constructor(
@@ -201,7 +202,9 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
             this.customWarrantyText = record.customWarrantyText;
             this.serialNumber = record.serialNumber;
         } else {
-            this.serviceType = record.serviceType.toString();
+            debugger;
+            this.serviceType = record.serviceType ? record.serviceType.toString() : "";
+            this.serviceTypeText = record.serviceTypeText;
         }
 
         this.unitPrice = record.unitPrice;
@@ -222,7 +225,15 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
             detail.warrantyPeriod = this.warrantyPeriod;
             detail.customWarrantyText = this.customWarrantyText;
         } else {
-            const serviceTypeObject = this.convertServiceTypeToEnum();
+            let serviceTypeObject: any;
+            if (!this.serviceType) {
+                serviceTypeObject = {
+                    type: null,
+                    displayText: this.serviceTypeText
+                }
+            } else {
+                serviceTypeObject = this.convertServiceTypeToEnum();
+            }
             detail.serviceType = serviceTypeObject.type;
             detail.serviceTypeText = serviceTypeObject.displayText;
         }
@@ -252,7 +263,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                 brand: this.productInfo.brand,
                 serialNumber: this.serialNumber,
                 sealText: this.sealText,
-                warrantyPeriod:  this.customWarrantyText ? this.customWarrantyText :this.warrantyPeriod,
+                warrantyPeriod: this.customWarrantyText ? this.customWarrantyText : this.warrantyPeriod,
                 customWarrantyText: this.customWarrantyText,
                 unitPrice: this.unitPrice,
                 quantity: this.quantity,
@@ -262,7 +273,16 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
             } as InvoiceDetailsEntryDto;
             this.invoiceDetails.push(invoiceDetail);
         } else {
-            const serviceTypeObject = this.convertServiceTypeToEnum();
+            debugger;
+            let serviceTypeObject: any;
+            if (!this.serviceType) {
+                serviceTypeObject = {
+                    type: null,
+                    displayText: this.serviceTypeText
+                }
+            } else {
+                serviceTypeObject = this.convertServiceTypeToEnum();
+            }
 
             const invoiceDetail = {
                 id: undefined,
@@ -286,23 +306,24 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
         const serviceTypeObject: any = {
             displayText: this.serviceTypes.find(f => f.value == this.serviceType).displayText
         };
-        switch (this.serviceType) {
-            case "1":
-                serviceTypeObject.type = ServiceType._1;
-                break;
-            case "2":
-                serviceTypeObject.type = ServiceType._2;
-                break;
-            case "3":
-                serviceTypeObject.type = ServiceType._3;
-                break;
-            case "4":
-                serviceTypeObject.type = ServiceType._4;
-                break;
-            case "5":
-                serviceTypeObject.type = ServiceType._5;
-                break;
-        };
+        serviceTypeObject.type = this.serviceType;
+        // switch (this.serviceType) {
+        //     case "1":
+        //         serviceTypeObject.type = ServiceType._1;
+        //         break;
+        //     case "2":
+        //         serviceTypeObject.type = ServiceType._2;
+        //         break;
+        //     case "3":
+        //         serviceTypeObject.type = ServiceType._3;
+        //         break;
+        //     case "4":
+        //         serviceTypeObject.type = ServiceType._4;
+        //         break;
+        //     case "5":
+        //         serviceTypeObject.type = ServiceType._5;
+        //         break;
+        // };
         return serviceTypeObject;
     }
 
@@ -324,7 +345,8 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
         this.quantity = 0;
         this.unitPrice = 0;
         this.totalAmount = 0;
-        this.serviceType = undefined;
+        this.serviceType = "";
+        this.serviceTypeText = "";
         this.cd.detectChanges();
     }
 
@@ -345,6 +367,7 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
                 warrantyPeriod: x.warrantyPeriod,
                 customWarrantyText: x.customWarrantyText,
                 serviceType: x.serviceType,
+                serviceTypeText: x.serviceTypeText,
                 unitPrice: x.unitPrice,
                 quantity: x.quantity,
                 totalAmount: x.totalAmount
@@ -675,16 +698,16 @@ export class InvoiceEntryComponent extends AppComponentBase implements OnInit {
             return body;
         } else {
             const body = [
-                [{ text: 'Service Type', style: ['headerStyle'] }, { text: 'Qty', style: ['headerStyle'] }, { text: 'U. P.', style: ['headerStyle', 'textRight'] }, { text: 'Total Price', style: ['headerStyle', 'textRight'] }] as any
+                [{ text: 'Service Type', style: ['headerStyle'] }, { text: 'Qty', style: ['headerStyle', 'textCenter'] }, { text: 'U. P.', style: ['headerStyle', 'textRight'] }, { text: 'Total Price', style: ['headerStyle', 'textRight'] }] as any
             ];
             data.forEach(item => {
-                const serviceText = this.serviceTypes.find(f => f.value === item.serviceType.toString()).displayText;
+                const serviceText = item.serviceType ? this.serviceTypes.find(f => f.value === item.serviceType.toString()).displayText : item.serviceTypeText;
 
                 body.push(
                     [
                         { text: serviceText, fontSize: 10 },
                         { text: item.quantity, style: ['cell_style'] },
-                        { text: `${Utils.thousandsSeparator(item.unitPrice)}`, style: ['cell_style'] },
+                        { text: `${Utils.thousandsSeparator(item.unitPrice)}`, style: ['cellAmount'] },
                         { text: `${Utils.thousandsSeparator(item.totalAmount)}`, style: ['cellAmount'] }
                     ]
                 );

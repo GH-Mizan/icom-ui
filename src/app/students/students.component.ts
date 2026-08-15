@@ -14,6 +14,19 @@ import { StudentEntryComponent } from './student-entry/student-entry.component';
   standalone: false,
   templateUrl: './students.component.html',
   animations: [appModuleAnimation()],
+  styles: [
+    `
+      .truncated-cell {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100px; /* Adjust or use a percentage if column sizes are fixed */
+      }
+      .no-wrap {
+        white-space: nowrap;
+      }
+    `
+  ]
 })
 
 export class StudentsComponent extends PagedListingComponentBase<StudentOutputDto> implements OnInit {
@@ -74,7 +87,7 @@ export class StudentsComponent extends PagedListingComponentBase<StudentOutputDt
     const certificateDistributed = this.certificateDistributed?.toString() == "true" ? true : this.certificateDistributed?.toString() == "false" ? false : undefined;
     const sessionId = (this.btebSessionId == null || this.btebSessionId.toString() == "null") ? undefined : this.btebSessionId;
     const courseId = (this.courseId == null || this.courseId.toString() == "null") ? undefined : this.courseId;
-     const isActive = this.isActive?.toString() == "true" ? true : this.isActive?.toString() == "false" ? false : undefined;
+    const isActive = this.isActive?.toString() == "true" ? true : this.isActive?.toString() == "false" ? false : undefined;
 
     this._studentService.getPaginatedStudents(
       isBteb,

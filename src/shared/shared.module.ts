@@ -30,6 +30,7 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectOnFocusDirective } from './directives/select-on-focus.directive';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
     imports: [
@@ -55,7 +56,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
         SelectModule,
         DatePickerModule,
         SelectOnFocusDirective,
-        MultiSelectModule
+        MultiSelectModule,
+        TooltipModule
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -76,7 +78,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
         SelectModule,
         DatePickerModule,
         SelectOnFocusDirective,
-        MultiSelectModule
+        MultiSelectModule,
+        TooltipModule
     ],
 })
 export class SharedModule {
